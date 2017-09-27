@@ -488,12 +488,6 @@ input AuthProviderSignupData {
   email: AUTH_PROVIDER_EMAIL
 }
 
-# The `BigDecimal` scalar type represents signed fractional values with arbitrary precision.
-scalar BigDecimal
-
-# The `BigInt` scalar type represents non-fractional signed whole numeric values. BigInt can represent arbitrary big values.
-scalar BigInt
-
 input CreateAppSettings {
   userId: ID
 }
@@ -667,13 +661,13 @@ type CreateIngredientPayload {
 }
 
 input CreateKitchenUtensil {
-  type: KITCHEN_UTENSIL_TYPE!
+  type: KitchenUtensils!
   imgId: ID
   img: KitchenUtensilimgFile
 }
 
 input CreateKitchenUtensilInput {
-  type: KITCHEN_UTENSIL_TYPE!
+  type: KitchenUtensils!
   imgId: ID
   img: KitchenUtensilimgFile
   clientMutationId: String!
@@ -795,7 +789,7 @@ type CreateMicroTargetPayload {
 }
 
 input CreateMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
+  day: Days!
   microTargetsSettingsId: ID
   microTargetsSettings: MicroTargetsDaymicroTargetsSettingsMicroTargetsSettings
   microTargetsIds: [ID!]
@@ -803,7 +797,7 @@ input CreateMicroTargetsDay {
 }
 
 input CreateMicroTargetsDayInput {
-  day: MICRO_TARGETS_DAY_DAY!
+  day: Days!
   microTargetsSettingsId: ID
   microTargetsSettings: MicroTargetsDaymicroTargetsSettingsMicroTargetsSettings
   microTargetsIds: [ID!]
@@ -845,13 +839,13 @@ type CreateMicroTargetsSettingsPayload {
 }
 
 input CreateNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
+  day: Days!
   nutritionTargetsSettingsId: ID
   nutritionTargetsSettings: NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettings
 }
 
 input CreateNutritionTargetsDayInput {
-  day: NUTRITION_TARGETS_DAY_DAY!
+  day: Days!
   nutritionTargetsSettingsId: ID
   nutritionTargetsSettings: NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettings
   clientMutationId: String!
@@ -1012,7 +1006,7 @@ type CreatePersonPayload {
 }
 
 input CreateRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   public: Boolean
   foodId: ID
   food: RecipefoodFood
@@ -1030,7 +1024,7 @@ input CreateRecipe {
 }
 
 input CreateRecipeInput {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   public: Boolean
   foodId: ID
   food: RecipefoodFood
@@ -1088,7 +1082,8 @@ type CreateServingPayload {
 }
 
 input CreateUser {
-  kitchenUtensils: [USER_KITCHEN_UTENSILS!]
+  auth0UserId: String
+  kitchenUtensils: [KitchenUtensils!]
   publicName: String
   appSettingsId: ID
   limitationProfilesIds: [ID!]
@@ -1469,6 +1464,17 @@ enum DataPointIntOrderBy {
 }
 
 scalar DateTime
+
+enum Days {
+  Mon
+  Tue
+  Wed
+  Thu
+  Fri
+  Sat
+  Sun
+  All
+}
 
 input DeleteAppSettingsInput {
   id: ID!
@@ -2118,7 +2124,7 @@ input FileFilter {
 }
 
 input FilekitchenUtensilImgKitchenUtensil {
-  type: KITCHEN_UTENSIL_TYPE!
+  type: KitchenUtensils!
 }
 
 enum FileOrderBy {
@@ -2141,248 +2147,19 @@ enum FileOrderBy {
 }
 
 input FilerecipeImgRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   public: Boolean
   foodId: ID
-  food: FilerecipeImgRecipefoodFood
+  food: RecipefoodFood
   nutritionValuesId: ID
-  nutritionValues: FilerecipeImgRecipenutritionValuesNutritionValues
+  nutritionValues: RecipenutritionValuesNutritionValues
   userId: ID
   dislikedByIds: [ID!]
-  dislikedBy: [FilerecipeImgRecipedislikedByPerson!]
+  dislikedBy: [RecipedislikedByPerson!]
   ingredientsIds: [ID!]
-  ingredients: [FilerecipeImgRecipeingredientsIngredient!]
+  ingredients: [RecipeingredientsIngredient!]
   likedByIds: [ID!]
-  likedBy: [FilerecipeImgRecipelikedByPerson!]
-}
-
-input FilerecipeImgRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: FilerecipeImgRecipedislikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: FilerecipeImgRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: FilerecipeImgRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: FilerecipeImgRecipedislikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: FilerecipeImgRecipedislikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [FilerecipeImgRecipedislikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [FilerecipeImgRecipedislikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [FilerecipeImgRecipedislikedByPersonmealSettingsMealSettings!]
-}
-
-input FilerecipeImgRecipedislikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FilerecipeImgRecipedislikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FilerecipeImgRecipedislikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input FilerecipeImgRecipedislikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input FilerecipeImgRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input FilerecipeImgRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input FilerecipeImgRecipedislikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input FilerecipeImgRecipedislikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input FilerecipeImgRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  meal: FilerecipeImgRecipefoodFoodmealMeal
-  leftoversIds: [ID!]
-  leftovers: [FilerecipeImgRecipefoodFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [FilerecipeImgRecipefoodFoodservingsServing!]
-}
-
-input FilerecipeImgRecipefoodFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input FilerecipeImgRecipefoodFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input FilerecipeImgRecipefoodFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input FilerecipeImgRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  nutritionValues: FilerecipeImgRecipeingredientsIngredientnutritionValuesNutritionValues
-  userId: ID
-  foodItemsIds: [ID!]
-  foodItems: [FilerecipeImgRecipeingredientsIngredientfoodItemsFoodItem!]
-}
-
-input FilerecipeImgRecipeingredientsIngredientfoodItemsFoodItem {
-  amount: Float
-  ingredientId: ID
-  pantryItemId: ID
-}
-
-input FilerecipeImgRecipeingredientsIngredientnutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input FilerecipeImgRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: FilerecipeImgRecipelikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: FilerecipeImgRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: FilerecipeImgRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: FilerecipeImgRecipelikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: FilerecipeImgRecipelikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [FilerecipeImgRecipelikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [FilerecipeImgRecipelikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [FilerecipeImgRecipelikedByPersonmealSettingsMealSettings!]
-}
-
-input FilerecipeImgRecipelikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FilerecipeImgRecipelikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FilerecipeImgRecipelikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input FilerecipeImgRecipelikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input FilerecipeImgRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input FilerecipeImgRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input FilerecipeImgRecipelikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input FilerecipeImgRecipelikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input FilerecipeImgRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  ingredient: FilerecipeImgRecipenutritionValuesNutritionValuesingredientIngredient
-}
-
-input FilerecipeImgRecipenutritionValuesNutritionValuesingredientIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
+  likedBy: [RecipelikedByPerson!]
 }
 
 type Food implements Node {
@@ -2693,113 +2470,12 @@ input FoodItemFilter {
 
 input FoodItemingredientIngredient {
   nutritionValuesId: ID
-  nutritionValues: FoodItemingredientIngredientnutritionValuesNutritionValues
+  nutritionValues: IngredientnutritionValuesNutritionValues
   recipeId: ID
-  recipe: FoodItemingredientIngredientrecipeRecipe
+  recipe: IngredientrecipeRecipe
   userId: ID
   foodItemsIds: [ID!]
-  foodItems: [FoodItemingredientIngredientfoodItemsFoodItem!]
-}
-
-input FoodItemingredientIngredientfoodItemsFoodItem {
-  amount: Float
-  pantryItemId: ID
-  pantryItem: FoodItemingredientIngredientfoodItemsFoodItempantryItemPantryItem
-}
-
-input FoodItemingredientIngredientfoodItemsFoodItempantryItemPantryItem {
-  foodItemId: ID
-  userId: ID
-}
-
-input FoodItemingredientIngredientnutritionValuesNutritionValues {
-  recipeId: ID
-  recipe: FoodItemingredientIngredientnutritionValuesNutritionValuesrecipeRecipe
-}
-
-input FoodItemingredientIngredientnutritionValuesNutritionValuesrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FoodItemingredientIngredientrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: FoodItemingredientIngredientrecipeRecipefoodFood
-  imgId: ID
-  img: FoodItemingredientIngredientrecipeRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: FoodItemingredientIngredientrecipeRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [FoodItemingredientIngredientrecipeRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [FoodItemingredientIngredientrecipeRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [FoodItemingredientIngredientrecipeRecipelikedByPerson!]
-}
-
-input FoodItemingredientIngredientrecipeRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input FoodItemingredientIngredientrecipeRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input FoodItemingredientIngredientrecipeRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input FoodItemingredientIngredientrecipeRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input FoodItemingredientIngredientrecipeRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input FoodItemingredientIngredientrecipeRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
+  foodItems: [IngredientfoodItemsFoodItem!]
 }
 
 enum FoodItemOrderBy {
@@ -2821,172 +2497,13 @@ input FoodleftoversFood {
   eaten: Boolean
   pos: Int
   mealId: ID
-  meal: FoodleftoversFoodmealMeal
+  meal: FoodmealMeal
   recipeId: ID
-  recipe: FoodleftoversFoodrecipeRecipe
+  recipe: FoodrecipeRecipe
   leftoversIds: [ID!]
-  leftovers: [FoodleftoversFoodleftoversFood!]
+  leftovers: [FoodleftoversFood!]
   servingsIds: [ID!]
-  servings: [FoodleftoversFoodservingsServing!]
-}
-
-input FoodleftoversFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  meal: FoodleftoversFoodleftoversFoodmealMeal
-  recipeId: ID
-  recipe: FoodleftoversFoodleftoversFoodrecipeRecipe
-  leftoversIds: [ID!]
-  leftovers: [FoodleftoversFoodleftoversFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [FoodleftoversFoodleftoversFoodservingsServing!]
-}
-
-input FoodleftoversFoodleftoversFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input FoodleftoversFoodleftoversFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input FoodleftoversFoodleftoversFoodrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FoodleftoversFoodleftoversFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input FoodleftoversFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  foods: [FoodleftoversFoodmealMealfoodsFood!]
-  mealSettingsIds: [ID!]
-  mealSettings: [FoodleftoversFoodmealMealmealSettingsMealSettings!]
-}
-
-input FoodleftoversFoodmealMealfoodsFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input FoodleftoversFoodmealMealmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input FoodleftoversFoodrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  imgId: ID
-  img: FoodleftoversFoodrecipeRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: FoodleftoversFoodrecipeRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [FoodleftoversFoodrecipeRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [FoodleftoversFoodrecipeRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [FoodleftoversFoodrecipeRecipelikedByPerson!]
-}
-
-input FoodleftoversFoodrecipeRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input FoodleftoversFoodrecipeRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input FoodleftoversFoodrecipeRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input FoodleftoversFoodrecipeRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input FoodleftoversFoodrecipeRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input FoodleftoversFoodservingsServing {
-  guest: Boolean
-  size: Float
-  personId: ID
-  person: FoodleftoversFoodservingsServingpersonPerson
-}
-
-input FoodleftoversFoodservingsServingpersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
+  servings: [FoodservingsServing!]
 }
 
 input FoodmealMeal {
@@ -2995,68 +2512,9 @@ input FoodmealMeal {
   order: Int
   userId: ID
   foodsIds: [ID!]
-  foods: [FoodmealMealfoodsFood!]
+  foods: [MealfoodsFood!]
   mealSettingsIds: [ID!]
-  mealSettings: [FoodmealMealmealSettingsMealSettings!]
-}
-
-input FoodmealMealfoodsFood {
-  eaten: Boolean
-  pos: Int
-  recipeId: ID
-  recipe: FoodmealMealfoodsFoodrecipeRecipe
-  leftoversIds: [ID!]
-  leftovers: [FoodmealMealfoodsFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [FoodmealMealfoodsFoodservingsServing!]
-}
-
-input FoodmealMealfoodsFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input FoodmealMealfoodsFoodrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FoodmealMealfoodsFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input FoodmealMealmealSettingsMealSettings {
-  default: Boolean
-  personId: ID
-  person: FoodmealMealmealSettingsMealSettingspersonPerson
-}
-
-input FoodmealMealmealSettingsMealSettingspersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
+  mealSettings: [MealmealSettingsMealSettings!]
 }
 
 enum FoodOrderBy {
@@ -3073,302 +2531,26 @@ enum FoodOrderBy {
 }
 
 input FoodrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   public: Boolean
   imgId: ID
-  img: FoodrecipeRecipeimgFile
+  img: RecipeimgFile
   nutritionValuesId: ID
-  nutritionValues: FoodrecipeRecipenutritionValuesNutritionValues
+  nutritionValues: RecipenutritionValuesNutritionValues
   userId: ID
   dislikedByIds: [ID!]
-  dislikedBy: [FoodrecipeRecipedislikedByPerson!]
+  dislikedBy: [RecipedislikedByPerson!]
   ingredientsIds: [ID!]
-  ingredients: [FoodrecipeRecipeingredientsIngredient!]
+  ingredients: [RecipeingredientsIngredient!]
   likedByIds: [ID!]
-  likedBy: [FoodrecipeRecipelikedByPerson!]
-}
-
-input FoodrecipeRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: FoodrecipeRecipedislikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: FoodrecipeRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: FoodrecipeRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: FoodrecipeRecipedislikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: FoodrecipeRecipedislikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [FoodrecipeRecipedislikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [FoodrecipeRecipedislikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [FoodrecipeRecipedislikedByPersonmealSettingsMealSettings!]
-}
-
-input FoodrecipeRecipedislikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FoodrecipeRecipedislikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FoodrecipeRecipedislikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input FoodrecipeRecipedislikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input FoodrecipeRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input FoodrecipeRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input FoodrecipeRecipedislikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input FoodrecipeRecipedislikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input FoodrecipeRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  kitchenUtensilImg: FoodrecipeRecipeimgFilekitchenUtensilImgKitchenUtensil
-}
-
-input FoodrecipeRecipeimgFilekitchenUtensilImgKitchenUtensil {
-  type: KITCHEN_UTENSIL_TYPE!
-  imgId: ID
-}
-
-input FoodrecipeRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  nutritionValues: FoodrecipeRecipeingredientsIngredientnutritionValuesNutritionValues
-  userId: ID
-  foodItemsIds: [ID!]
-  foodItems: [FoodrecipeRecipeingredientsIngredientfoodItemsFoodItem!]
-}
-
-input FoodrecipeRecipeingredientsIngredientfoodItemsFoodItem {
-  amount: Float
-  ingredientId: ID
-  pantryItemId: ID
-}
-
-input FoodrecipeRecipeingredientsIngredientnutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input FoodrecipeRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: FoodrecipeRecipelikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: FoodrecipeRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: FoodrecipeRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: FoodrecipeRecipelikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: FoodrecipeRecipelikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [FoodrecipeRecipelikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [FoodrecipeRecipelikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [FoodrecipeRecipelikedByPersonmealSettingsMealSettings!]
-}
-
-input FoodrecipeRecipelikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FoodrecipeRecipelikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FoodrecipeRecipelikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input FoodrecipeRecipelikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input FoodrecipeRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input FoodrecipeRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input FoodrecipeRecipelikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input FoodrecipeRecipelikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input FoodrecipeRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  ingredient: FoodrecipeRecipenutritionValuesNutritionValuesingredientIngredient
-}
-
-input FoodrecipeRecipenutritionValuesNutritionValuesingredientIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
+  likedBy: [RecipelikedByPerson!]
 }
 
 input FoodservingsServing {
   guest: Boolean
   size: Float
   personId: ID
-  person: FoodservingsServingpersonPerson
-}
-
-input FoodservingsServingpersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: FoodservingsServingpersonPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: FoodservingsServingpersonPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: FoodservingsServingpersonPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: FoodservingsServingpersonPersonpersonalDataPersonalData
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [FoodservingsServingpersonPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [FoodservingsServingpersonPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [FoodservingsServingpersonPersonmealSettingsMealSettings!]
-}
-
-input FoodservingsServingpersonPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FoodservingsServingpersonPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input FoodservingsServingpersonPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input FoodservingsServingpersonPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input FoodservingsServingpersonPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input FoodservingsServingpersonPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input FoodservingsServingpersonPersonpersonalDataPersonalData {
-  personId: ID
+  person: ServingpersonPerson
 }
 
 type Ingredient implements Node {
@@ -3503,82 +2685,12 @@ input IngredientFilter {
 input IngredientfoodItemsFoodItem {
   amount: Float
   pantryItemId: ID
-  pantryItem: IngredientfoodItemsFoodItempantryItemPantryItem
-}
-
-input IngredientfoodItemsFoodItempantryItemPantryItem {
-  userId: ID
+  pantryItem: FoodItempantryItemPantryItem
 }
 
 input IngredientnutritionValuesNutritionValues {
   recipeId: ID
-  recipe: IngredientnutritionValuesNutritionValuesrecipeRecipe
-}
-
-input IngredientnutritionValuesNutritionValuesrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: IngredientnutritionValuesNutritionValuesrecipeRecipefoodFood
-  imgId: ID
-  img: IngredientnutritionValuesNutritionValuesrecipeRecipeimgFile
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [IngredientnutritionValuesNutritionValuesrecipeRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [IngredientnutritionValuesNutritionValuesrecipeRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [IngredientnutritionValuesNutritionValuesrecipeRecipelikedByPerson!]
-}
-
-input IngredientnutritionValuesNutritionValuesrecipeRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input IngredientnutritionValuesNutritionValuesrecipeRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input IngredientnutritionValuesNutritionValuesrecipeRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input IngredientnutritionValuesNutritionValuesrecipeRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input IngredientnutritionValuesNutritionValuesrecipeRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
+  recipe: NutritionValuesrecipeRecipe
 }
 
 enum IngredientOrderBy {
@@ -3591,273 +2703,28 @@ enum IngredientOrderBy {
 }
 
 input IngredientrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   public: Boolean
   foodId: ID
-  food: IngredientrecipeRecipefoodFood
+  food: RecipefoodFood
   imgId: ID
-  img: IngredientrecipeRecipeimgFile
+  img: RecipeimgFile
   nutritionValuesId: ID
-  nutritionValues: IngredientrecipeRecipenutritionValuesNutritionValues
+  nutritionValues: RecipenutritionValuesNutritionValues
   userId: ID
   dislikedByIds: [ID!]
-  dislikedBy: [IngredientrecipeRecipedislikedByPerson!]
+  dislikedBy: [RecipedislikedByPerson!]
   ingredientsIds: [ID!]
-  ingredients: [IngredientrecipeRecipeingredientsIngredient!]
+  ingredients: [RecipeingredientsIngredient!]
   likedByIds: [ID!]
-  likedBy: [IngredientrecipeRecipelikedByPerson!]
-}
-
-input IngredientrecipeRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: IngredientrecipeRecipedislikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: IngredientrecipeRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: IngredientrecipeRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: IngredientrecipeRecipedislikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: IngredientrecipeRecipedislikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [IngredientrecipeRecipedislikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [IngredientrecipeRecipedislikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [IngredientrecipeRecipedislikedByPersonmealSettingsMealSettings!]
-}
-
-input IngredientrecipeRecipedislikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input IngredientrecipeRecipedislikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input IngredientrecipeRecipedislikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input IngredientrecipeRecipedislikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input IngredientrecipeRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input IngredientrecipeRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input IngredientrecipeRecipedislikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input IngredientrecipeRecipedislikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input IngredientrecipeRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  meal: IngredientrecipeRecipefoodFoodmealMeal
-  leftoversIds: [ID!]
-  leftovers: [IngredientrecipeRecipefoodFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [IngredientrecipeRecipefoodFoodservingsServing!]
-}
-
-input IngredientrecipeRecipefoodFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input IngredientrecipeRecipefoodFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input IngredientrecipeRecipefoodFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input IngredientrecipeRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  kitchenUtensilImg: IngredientrecipeRecipeimgFilekitchenUtensilImgKitchenUtensil
-}
-
-input IngredientrecipeRecipeimgFilekitchenUtensilImgKitchenUtensil {
-  type: KITCHEN_UTENSIL_TYPE!
-  imgId: ID
-}
-
-input IngredientrecipeRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  nutritionValues: IngredientrecipeRecipeingredientsIngredientnutritionValuesNutritionValues
-  userId: ID
-  foodItemsIds: [ID!]
-  foodItems: [IngredientrecipeRecipeingredientsIngredientfoodItemsFoodItem!]
-}
-
-input IngredientrecipeRecipeingredientsIngredientfoodItemsFoodItem {
-  amount: Float
-  ingredientId: ID
-  pantryItemId: ID
-}
-
-input IngredientrecipeRecipeingredientsIngredientnutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input IngredientrecipeRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: IngredientrecipeRecipelikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: IngredientrecipeRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: IngredientrecipeRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: IngredientrecipeRecipelikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: IngredientrecipeRecipelikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [IngredientrecipeRecipelikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [IngredientrecipeRecipelikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [IngredientrecipeRecipelikedByPersonmealSettingsMealSettings!]
-}
-
-input IngredientrecipeRecipelikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input IngredientrecipeRecipelikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input IngredientrecipeRecipelikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input IngredientrecipeRecipelikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input IngredientrecipeRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input IngredientrecipeRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input IngredientrecipeRecipelikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input IngredientrecipeRecipelikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input IngredientrecipeRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  ingredient: IngredientrecipeRecipenutritionValuesNutritionValuesingredientIngredient
-}
-
-input IngredientrecipeRecipenutritionValuesNutritionValuesingredientIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-enum KITCHEN_UTENSIL_TYPE {
-  Pan
-  Oven
+  likedBy: [RecipelikedByPerson!]
 }
 
 type KitchenUtensil implements Node {
   createdAt: DateTime!
   id: ID!
   img(filter: FileFilter): File
-  type: KITCHEN_UTENSIL_TYPE!
+  type: KitchenUtensils!
   updatedAt: DateTime!
 }
 
@@ -3950,16 +2817,16 @@ input KitchenUtensilFilter {
 
   # All values not ending with the given string.
   id_not_ends_with: ID
-  type: KITCHEN_UTENSIL_TYPE
+  type: KitchenUtensils
 
   # All values that are not equal to given value.
-  type_not: KITCHEN_UTENSIL_TYPE
+  type_not: KitchenUtensils
 
   # All values that are contained in given list.
-  type_in: [KITCHEN_UTENSIL_TYPE!]
+  type_in: [KitchenUtensils!]
 
   # All values that are not contained in given list.
-  type_not_in: [KITCHEN_UTENSIL_TYPE!]
+  type_not_in: [KitchenUtensils!]
   updatedAt: DateTime
 
   # All values that are not equal to given value.
@@ -3988,72 +2855,7 @@ input KitchenUtensilFilter {
 input KitchenUtensilimgFile {
   name: String!
   recipeImgId: ID
-  recipeImg: KitchenUtensilimgFilerecipeImgRecipe
-}
-
-input KitchenUtensilimgFilerecipeImgRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: KitchenUtensilimgFilerecipeImgRecipefoodFood
-  nutritionValuesId: ID
-  nutritionValues: KitchenUtensilimgFilerecipeImgRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [KitchenUtensilimgFilerecipeImgRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [KitchenUtensilimgFilerecipeImgRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [KitchenUtensilimgFilerecipeImgRecipelikedByPerson!]
-}
-
-input KitchenUtensilimgFilerecipeImgRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input KitchenUtensilimgFilerecipeImgRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input KitchenUtensilimgFilerecipeImgRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input KitchenUtensilimgFilerecipeImgRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input KitchenUtensilimgFilerecipeImgRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
+  recipeImg: FilerecipeImgRecipe
 }
 
 enum KitchenUtensilOrderBy {
@@ -4065,6 +2867,11 @@ enum KitchenUtensilOrderBy {
   type_DESC
   updatedAt_ASC
   updatedAt_DESC
+}
+
+enum KitchenUtensils {
+  Pan
+  Oven
 }
 
 type LimitationProfile implements Node {
@@ -4248,224 +3055,20 @@ input LimitationProfilepersonsPerson {
   family: Boolean
   name: String!
   microTargetsSettingsId: ID
-  microTargetsSettings: LimitationProfilepersonsPersonmicroTargetsSettingsMicroTargetsSettings
+  microTargetsSettings: PersonmicroTargetsSettingsMicroTargetsSettings
   nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: LimitationProfilepersonsPersonnutritionTargetsSettingsNutritionTargetsSettings
+  nutritionTargetsSettings: PersonnutritionTargetsSettingsNutritionTargetsSettings
   personalDataId: ID
   servingId: ID
-  serving: LimitationProfilepersonsPersonservingServing
+  serving: PersonservingServing
   userId: ID
   dislikedRecipesIds: [ID!]
-  dislikedRecipes: [LimitationProfilepersonsPersondislikedRecipesRecipe!]
+  dislikedRecipes: [PersondislikedRecipesRecipe!]
   likedRecipesIds: [ID!]
-  likedRecipes: [LimitationProfilepersonsPersonlikedRecipesRecipe!]
+  likedRecipes: [PersonlikedRecipesRecipe!]
   mealSettingsIds: [ID!]
-  mealSettings: [LimitationProfilepersonsPersonmealSettingsMealSettings!]
+  mealSettings: [PersonmealSettingsMealSettings!]
 }
-
-input LimitationProfilepersonsPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: LimitationProfilepersonsPersondislikedRecipesRecipefoodFood
-  imgId: ID
-  img: LimitationProfilepersonsPersondislikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: LimitationProfilepersonsPersondislikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [LimitationProfilepersonsPersondislikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [LimitationProfilepersonsPersondislikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [LimitationProfilepersonsPersondislikedRecipesRecipelikedByPerson!]
-}
-
-input LimitationProfilepersonsPersondislikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input LimitationProfilepersonsPersondislikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input LimitationProfilepersonsPersondislikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input LimitationProfilepersonsPersondislikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input LimitationProfilepersonsPersondislikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input LimitationProfilepersonsPersondislikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input LimitationProfilepersonsPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: LimitationProfilepersonsPersonlikedRecipesRecipefoodFood
-  imgId: ID
-  img: LimitationProfilepersonsPersonlikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: LimitationProfilepersonsPersonlikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [LimitationProfilepersonsPersonlikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [LimitationProfilepersonsPersonlikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [LimitationProfilepersonsPersonlikedRecipesRecipelikedByPerson!]
-}
-
-input LimitationProfilepersonsPersonlikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input LimitationProfilepersonsPersonlikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input LimitationProfilepersonsPersonlikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input LimitationProfilepersonsPersonlikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input LimitationProfilepersonsPersonlikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input LimitationProfilepersonsPersonlikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input LimitationProfilepersonsPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  meal: LimitationProfilepersonsPersonmealSettingsMealSettingsmealMeal
-}
-
-input LimitationProfilepersonsPersonmealSettingsMealSettingsmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input LimitationProfilepersonsPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  microTargetsDaysIds: [ID!]
-  microTargetsDays: [LimitationProfilepersonsPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
-}
-
-input LimitationProfilepersonsPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
-  microTargetsSettingsId: ID
-  microTargetsIds: [ID!]
-}
-
-input LimitationProfilepersonsPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  nutritionTargetsDaysIds: [ID!]
-  nutritionTargetsDays: [LimitationProfilepersonsPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
-}
-
-input LimitationProfilepersonsPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
-  nutritionTargetsSettingsId: ID
-}
-
-input LimitationProfilepersonsPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  food: LimitationProfilepersonsPersonservingServingfoodFood
-}
-
-input LimitationProfilepersonsPersonservingServingfoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-# The `Long` scalar type represents non-fractional signed whole numeric values.
-# Long can represent values between -(2^63) and 2^63 - 1.
-scalar Long
 
 # Meal that is eaten every day
 type Meal implements Node {
@@ -4478,6 +3081,19 @@ type Meal implements Node {
   order: Int
   updatedAt: DateTime!
   user(filter: UserFilter): User
+}
+
+enum MealCategories {
+  Breakfast
+  Fruit
+  Vegetable
+  Main
+  Side
+  Snack
+  Dessert
+  Drink
+  Shake
+  Bread
 }
 
 # A connection to a list of items.
@@ -4688,220 +3304,17 @@ input MealfoodsFood {
   eaten: Boolean
   pos: Int
   recipeId: ID
-  recipe: MealfoodsFoodrecipeRecipe
+  recipe: FoodrecipeRecipe
   leftoversIds: [ID!]
-  leftovers: [MealfoodsFoodleftoversFood!]
+  leftovers: [FoodleftoversFood!]
   servingsIds: [ID!]
-  servings: [MealfoodsFoodservingsServing!]
-}
-
-input MealfoodsFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  recipeId: ID
-  recipe: MealfoodsFoodleftoversFoodrecipeRecipe
-  leftoversIds: [ID!]
-  leftovers: [MealfoodsFoodleftoversFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [MealfoodsFoodleftoversFoodservingsServing!]
-}
-
-input MealfoodsFoodleftoversFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input MealfoodsFoodleftoversFoodrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input MealfoodsFoodleftoversFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input MealfoodsFoodrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  imgId: ID
-  img: MealfoodsFoodrecipeRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: MealfoodsFoodrecipeRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [MealfoodsFoodrecipeRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [MealfoodsFoodrecipeRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [MealfoodsFoodrecipeRecipelikedByPerson!]
-}
-
-input MealfoodsFoodrecipeRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MealfoodsFoodrecipeRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input MealfoodsFoodrecipeRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input MealfoodsFoodrecipeRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MealfoodsFoodrecipeRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input MealfoodsFoodservingsServing {
-  guest: Boolean
-  size: Float
-  personId: ID
-  person: MealfoodsFoodservingsServingpersonPerson
-}
-
-input MealfoodsFoodservingsServingpersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
+  servings: [FoodservingsServing!]
 }
 
 input MealmealSettingsMealSettings {
   default: Boolean
   personId: ID
-  person: MealmealSettingsMealSettingspersonPerson
-}
-
-input MealmealSettingsMealSettingspersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: MealmealSettingsMealSettingspersonPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: MealmealSettingsMealSettingspersonPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: MealmealSettingsMealSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: MealmealSettingsMealSettingspersonPersonpersonalDataPersonalData
-  servingId: ID
-  serving: MealmealSettingsMealSettingspersonPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [MealmealSettingsMealSettingspersonPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [MealmealSettingsMealSettingspersonPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [MealmealSettingsMealSettingspersonPersonmealSettingsMealSettings!]
-}
-
-input MealmealSettingsMealSettingspersonPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input MealmealSettingsMealSettingspersonPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input MealmealSettingsMealSettingspersonPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input MealmealSettingsMealSettingspersonPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input MealmealSettingsMealSettingspersonPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input MealmealSettingsMealSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input MealmealSettingsMealSettingspersonPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input MealmealSettingsMealSettingspersonPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
+  person: MealSettingspersonPerson
 }
 
 enum MealOrderBy {
@@ -5053,68 +3466,9 @@ input MealSettingsmealMeal {
   order: Int
   userId: ID
   foodsIds: [ID!]
-  foods: [MealSettingsmealMealfoodsFood!]
+  foods: [MealfoodsFood!]
   mealSettingsIds: [ID!]
-  mealSettings: [MealSettingsmealMealmealSettingsMealSettings!]
-}
-
-input MealSettingsmealMealfoodsFood {
-  eaten: Boolean
-  pos: Int
-  recipeId: ID
-  recipe: MealSettingsmealMealfoodsFoodrecipeRecipe
-  leftoversIds: [ID!]
-  leftovers: [MealSettingsmealMealfoodsFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [MealSettingsmealMealfoodsFoodservingsServing!]
-}
-
-input MealSettingsmealMealfoodsFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input MealSettingsmealMealfoodsFoodrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input MealSettingsmealMealfoodsFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input MealSettingsmealMealmealSettingsMealSettings {
-  default: Boolean
-  personId: ID
-  person: MealSettingsmealMealmealSettingsMealSettingspersonPerson
-}
-
-input MealSettingsmealMealmealSettingsMealSettingspersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
+  mealSettings: [MealmealSettingsMealSettings!]
 }
 
 enum MealSettingsOrderBy {
@@ -5132,253 +3486,21 @@ input MealSettingspersonPerson {
   family: Boolean
   name: String!
   limitationProfileId: ID
-  limitationProfile: MealSettingspersonPersonlimitationProfileLimitationProfile
+  limitationProfile: PersonlimitationProfileLimitationProfile
   microTargetsSettingsId: ID
-  microTargetsSettings: MealSettingspersonPersonmicroTargetsSettingsMicroTargetsSettings
+  microTargetsSettings: PersonmicroTargetsSettingsMicroTargetsSettings
   nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: MealSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettings
+  nutritionTargetsSettings: PersonnutritionTargetsSettingsNutritionTargetsSettings
   personalDataId: ID
   servingId: ID
-  serving: MealSettingspersonPersonservingServing
+  serving: PersonservingServing
   userId: ID
   dislikedRecipesIds: [ID!]
-  dislikedRecipes: [MealSettingspersonPersondislikedRecipesRecipe!]
+  dislikedRecipes: [PersondislikedRecipesRecipe!]
   likedRecipesIds: [ID!]
-  likedRecipes: [MealSettingspersonPersonlikedRecipesRecipe!]
+  likedRecipes: [PersonlikedRecipesRecipe!]
   mealSettingsIds: [ID!]
-  mealSettings: [MealSettingspersonPersonmealSettingsMealSettings!]
-}
-
-input MealSettingspersonPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: MealSettingspersonPersondislikedRecipesRecipefoodFood
-  imgId: ID
-  img: MealSettingspersonPersondislikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: MealSettingspersonPersondislikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [MealSettingspersonPersondislikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [MealSettingspersonPersondislikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [MealSettingspersonPersondislikedRecipesRecipelikedByPerson!]
-}
-
-input MealSettingspersonPersondislikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MealSettingspersonPersondislikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input MealSettingspersonPersondislikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input MealSettingspersonPersondislikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input MealSettingspersonPersondislikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MealSettingspersonPersondislikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input MealSettingspersonPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: MealSettingspersonPersonlikedRecipesRecipefoodFood
-  imgId: ID
-  img: MealSettingspersonPersonlikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: MealSettingspersonPersonlikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [MealSettingspersonPersonlikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [MealSettingspersonPersonlikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [MealSettingspersonPersonlikedRecipesRecipelikedByPerson!]
-}
-
-input MealSettingspersonPersonlikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MealSettingspersonPersonlikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input MealSettingspersonPersonlikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input MealSettingspersonPersonlikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input MealSettingspersonPersonlikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MealSettingspersonPersonlikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input MealSettingspersonPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-  persons: [MealSettingspersonPersonlimitationProfileLimitationProfilepersonsPerson!]
-}
-
-input MealSettingspersonPersonlimitationProfileLimitationProfilepersonsPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MealSettingspersonPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  meal: MealSettingspersonPersonmealSettingsMealSettingsmealMeal
-}
-
-input MealSettingspersonPersonmealSettingsMealSettingsmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MealSettingspersonPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  microTargetsDaysIds: [ID!]
-  microTargetsDays: [MealSettingspersonPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
-}
-
-input MealSettingspersonPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
-  microTargetsSettingsId: ID
-  microTargetsIds: [ID!]
-}
-
-input MealSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  nutritionTargetsDaysIds: [ID!]
-  nutritionTargetsDays: [MealSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
-}
-
-input MealSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
-  nutritionTargetsSettingsId: ID
-}
-
-input MealSettingspersonPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  food: MealSettingspersonPersonservingServingfoodFood
-}
-
-input MealSettingspersonPersonservingServingfoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-enum MICRO_TARGETS_DAY_DAY {
-  Mon
-  Tue
-  Wed
-  Thu
-  Fri
-  Sat
-  Sun
-  All
+  mealSettings: [PersonmealSettingsMealSettings!]
 }
 
 # target values for a micro target, vitamins etc
@@ -5632,46 +3754,11 @@ input MicroTargetFilter {
 }
 
 input MicroTargetmicroTargetDayMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
+  day: Days!
   microTargetsSettingsId: ID
-  microTargetsSettings: MicroTargetmicroTargetDayMicroTargetsDaymicroTargetsSettingsMicroTargetsSettings
+  microTargetsSettings: MicroTargetsDaymicroTargetsSettingsMicroTargetsSettings
   microTargetsIds: [ID!]
-  microTargets: [MicroTargetmicroTargetDayMicroTargetsDaymicroTargetsMicroTarget!]
-}
-
-input MicroTargetmicroTargetDayMicroTargetsDaymicroTargetsMicroTarget {
-  max: Float
-  min: Float
-  name: String!
-  unit: String!
-}
-
-input MicroTargetmicroTargetDayMicroTargetsDaymicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  person: MicroTargetmicroTargetDayMicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPerson
-  microTargetsDaysIds: [ID!]
-  microTargetsDays: [MicroTargetmicroTargetDayMicroTargetsDaymicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
-}
-
-input MicroTargetmicroTargetDayMicroTargetsDaymicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
-  microTargetsSettingsId: ID
-  microTargetsIds: [ID!]
-}
-
-input MicroTargetmicroTargetDayMicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
+  microTargets: [MicroTargetsDaymicroTargetsMicroTarget!]
 }
 
 enum MicroTargetOrderBy {
@@ -5693,7 +3780,7 @@ enum MicroTargetOrderBy {
 
 type MicroTargetsDay implements Node {
   createdAt: DateTime!
-  day: MICRO_TARGETS_DAY_DAY!
+  day: Days!
   id: ID!
   microTargets(filter: MicroTargetFilter, orderBy: MicroTargetOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): MicroTargetConnection
   microTargetsSettings(filter: MicroTargetsSettingsFilter): MicroTargetsSettings
@@ -5749,16 +3836,16 @@ input MicroTargetsDayFilter {
 
   # All values greater than or equal the given value.
   createdAt_gte: DateTime
-  day: MICRO_TARGETS_DAY_DAY
+  day: Days
 
   # All values that are not equal to given value.
-  day_not: MICRO_TARGETS_DAY_DAY
+  day_not: Days
 
   # All values that are contained in given list.
-  day_in: [MICRO_TARGETS_DAY_DAY!]
+  day_in: [Days!]
 
   # All values that are not contained in given list.
-  day_not_in: [MICRO_TARGETS_DAY_DAY!]
+  day_not_in: [Days!]
   id: ID
 
   # All values that are not equal to given value.
@@ -5837,96 +3924,9 @@ input MicroTargetsDaymicroTargetsMicroTarget {
 input MicroTargetsDaymicroTargetsSettingsMicroTargetsSettings {
   daily: Boolean
   personId: ID
-  person: MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPerson
+  person: MicroTargetsSettingspersonPerson
   microTargetsDaysIds: [ID!]
-  microTargetsDays: [MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
-}
-
-input MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
-  microTargetsIds: [ID!]
-  microTargets: [MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDaymicroTargetsMicroTarget!]
-}
-
-input MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDaymicroTargetsMicroTarget {
-  max: Float
-  min: Float
-  name: String!
-  unit: String!
-  microTargetDayId: ID
-}
-
-input MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonlimitationProfileLimitationProfile
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonpersonalDataPersonalData
-  servingId: ID
-  serving: MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonmealSettingsMealSettings!]
-}
-
-input MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input MicroTargetsDaymicroTargetsSettingsMicroTargetsSettingspersonPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
+  microTargetsDays: [MicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
 }
 
 enum MicroTargetsDayOrderBy {
@@ -6071,16 +4071,9 @@ input MicroTargetsSettingsFilter {
 }
 
 input MicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
+  day: Days!
   microTargetsIds: [ID!]
-  microTargets: [MicroTargetsSettingsmicroTargetsDaysMicroTargetsDaymicroTargetsMicroTarget!]
-}
-
-input MicroTargetsSettingsmicroTargetsDaysMicroTargetsDaymicroTargetsMicroTarget {
-  max: Float
-  min: Float
-  name: String!
-  unit: String!
+  microTargets: [MicroTargetsDaymicroTargetsMicroTarget!]
 }
 
 enum MicroTargetsSettingsOrderBy {
@@ -6098,228 +4091,19 @@ input MicroTargetsSettingspersonPerson {
   family: Boolean
   name: String!
   limitationProfileId: ID
-  limitationProfile: MicroTargetsSettingspersonPersonlimitationProfileLimitationProfile
+  limitationProfile: PersonlimitationProfileLimitationProfile
   nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: MicroTargetsSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettings
+  nutritionTargetsSettings: PersonnutritionTargetsSettingsNutritionTargetsSettings
   personalDataId: ID
   servingId: ID
-  serving: MicroTargetsSettingspersonPersonservingServing
+  serving: PersonservingServing
   userId: ID
   dislikedRecipesIds: [ID!]
-  dislikedRecipes: [MicroTargetsSettingspersonPersondislikedRecipesRecipe!]
+  dislikedRecipes: [PersondislikedRecipesRecipe!]
   likedRecipesIds: [ID!]
-  likedRecipes: [MicroTargetsSettingspersonPersonlikedRecipesRecipe!]
+  likedRecipes: [PersonlikedRecipesRecipe!]
   mealSettingsIds: [ID!]
-  mealSettings: [MicroTargetsSettingspersonPersonmealSettingsMealSettings!]
-}
-
-input MicroTargetsSettingspersonPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: MicroTargetsSettingspersonPersondislikedRecipesRecipefoodFood
-  imgId: ID
-  img: MicroTargetsSettingspersonPersondislikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: MicroTargetsSettingspersonPersondislikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [MicroTargetsSettingspersonPersondislikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [MicroTargetsSettingspersonPersondislikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [MicroTargetsSettingspersonPersondislikedRecipesRecipelikedByPerson!]
-}
-
-input MicroTargetsSettingspersonPersondislikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MicroTargetsSettingspersonPersondislikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input MicroTargetsSettingspersonPersondislikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input MicroTargetsSettingspersonPersondislikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input MicroTargetsSettingspersonPersondislikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MicroTargetsSettingspersonPersondislikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input MicroTargetsSettingspersonPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: MicroTargetsSettingspersonPersonlikedRecipesRecipefoodFood
-  imgId: ID
-  img: MicroTargetsSettingspersonPersonlikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: MicroTargetsSettingspersonPersonlikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [MicroTargetsSettingspersonPersonlikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [MicroTargetsSettingspersonPersonlikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [MicroTargetsSettingspersonPersonlikedRecipesRecipelikedByPerson!]
-}
-
-input MicroTargetsSettingspersonPersonlikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MicroTargetsSettingspersonPersonlikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input MicroTargetsSettingspersonPersonlikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input MicroTargetsSettingspersonPersonlikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input MicroTargetsSettingspersonPersonlikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MicroTargetsSettingspersonPersonlikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input MicroTargetsSettingspersonPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-  persons: [MicroTargetsSettingspersonPersonlimitationProfileLimitationProfilepersonsPerson!]
-}
-
-input MicroTargetsSettingspersonPersonlimitationProfileLimitationProfilepersonsPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MicroTargetsSettingspersonPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  meal: MicroTargetsSettingspersonPersonmealSettingsMealSettingsmealMeal
-}
-
-input MicroTargetsSettingspersonPersonmealSettingsMealSettingsmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input MicroTargetsSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  nutritionTargetsDaysIds: [ID!]
-  nutritionTargetsDays: [MicroTargetsSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
-}
-
-input MicroTargetsSettingspersonPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
-  nutritionTargetsSettingsId: ID
-}
-
-input MicroTargetsSettingspersonPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  food: MicroTargetsSettingspersonPersonservingServingfoodFood
-}
-
-input MicroTargetsSettingspersonPersonservingServingfoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
+  mealSettings: [PersonmealSettingsMealSettings!]
 }
 
 type Mutation {
@@ -6484,20 +4268,9 @@ interface Node {
   id: ID!
 }
 
-enum NUTRITION_TARGETS_DAY_DAY {
-  Mon
-  Tue
-  Wed
-  Thu
-  Fri
-  Sat
-  Sun
-  All
-}
-
 type NutritionTargetsDay implements Node {
   createdAt: DateTime!
-  day: NUTRITION_TARGETS_DAY_DAY!
+  day: Days!
   id: ID!
   nutritionTargetsSettings(filter: NutritionTargetsSettingsFilter): NutritionTargetsSettings
   updatedAt: DateTime!
@@ -6552,16 +4325,16 @@ input NutritionTargetsDayFilter {
 
   # All values greater than or equal the given value.
   createdAt_gte: DateTime
-  day: NUTRITION_TARGETS_DAY_DAY
+  day: Days
 
   # All values that are not equal to given value.
-  day_not: NUTRITION_TARGETS_DAY_DAY
+  day_not: Days
 
   # All values that are contained in given list.
-  day_in: [NUTRITION_TARGETS_DAY_DAY!]
+  day_in: [Days!]
 
   # All values that are not contained in given list.
-  day_not_in: [NUTRITION_TARGETS_DAY_DAY!]
+  day_not_in: [Days!]
   id: ID
 
   # All values that are not equal to given value.
@@ -6630,86 +4403,9 @@ input NutritionTargetsDayFilter {
 input NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettings {
   daily: Boolean
   personId: ID
-  person: NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPerson
+  person: NutritionTargetsSettingspersonPerson
   nutritionTargetsDaysIds: [ID!]
-  nutritionTargetsDays: [NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
-}
-
-input NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
-}
-
-input NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonmicroTargetsSettingsMicroTargetsSettings
-  personalDataId: ID
-  personalData: NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonpersonalDataPersonalData
-  servingId: ID
-  serving: NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonmealSettingsMealSettings!]
-}
-
-input NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettingspersonPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
+  nutritionTargetsDays: [NutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
 }
 
 enum NutritionTargetsDayOrderBy {
@@ -6854,7 +4550,7 @@ input NutritionTargetsSettingsFilter {
 }
 
 input NutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
+  day: Days!
 }
 
 enum NutritionTargetsSettingsOrderBy {
@@ -6872,229 +4568,19 @@ input NutritionTargetsSettingspersonPerson {
   family: Boolean
   name: String!
   limitationProfileId: ID
-  limitationProfile: NutritionTargetsSettingspersonPersonlimitationProfileLimitationProfile
+  limitationProfile: PersonlimitationProfileLimitationProfile
   microTargetsSettingsId: ID
-  microTargetsSettings: NutritionTargetsSettingspersonPersonmicroTargetsSettingsMicroTargetsSettings
+  microTargetsSettings: PersonmicroTargetsSettingsMicroTargetsSettings
   personalDataId: ID
   servingId: ID
-  serving: NutritionTargetsSettingspersonPersonservingServing
+  serving: PersonservingServing
   userId: ID
   dislikedRecipesIds: [ID!]
-  dislikedRecipes: [NutritionTargetsSettingspersonPersondislikedRecipesRecipe!]
+  dislikedRecipes: [PersondislikedRecipesRecipe!]
   likedRecipesIds: [ID!]
-  likedRecipes: [NutritionTargetsSettingspersonPersonlikedRecipesRecipe!]
+  likedRecipes: [PersonlikedRecipesRecipe!]
   mealSettingsIds: [ID!]
-  mealSettings: [NutritionTargetsSettingspersonPersonmealSettingsMealSettings!]
-}
-
-input NutritionTargetsSettingspersonPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: NutritionTargetsSettingspersonPersondislikedRecipesRecipefoodFood
-  imgId: ID
-  img: NutritionTargetsSettingspersonPersondislikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: NutritionTargetsSettingspersonPersondislikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [NutritionTargetsSettingspersonPersondislikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [NutritionTargetsSettingspersonPersondislikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [NutritionTargetsSettingspersonPersondislikedRecipesRecipelikedByPerson!]
-}
-
-input NutritionTargetsSettingspersonPersondislikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input NutritionTargetsSettingspersonPersondislikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input NutritionTargetsSettingspersonPersondislikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input NutritionTargetsSettingspersonPersondislikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input NutritionTargetsSettingspersonPersondislikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input NutritionTargetsSettingspersonPersondislikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input NutritionTargetsSettingspersonPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: NutritionTargetsSettingspersonPersonlikedRecipesRecipefoodFood
-  imgId: ID
-  img: NutritionTargetsSettingspersonPersonlikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: NutritionTargetsSettingspersonPersonlikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [NutritionTargetsSettingspersonPersonlikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [NutritionTargetsSettingspersonPersonlikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [NutritionTargetsSettingspersonPersonlikedRecipesRecipelikedByPerson!]
-}
-
-input NutritionTargetsSettingspersonPersonlikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input NutritionTargetsSettingspersonPersonlikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input NutritionTargetsSettingspersonPersonlikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input NutritionTargetsSettingspersonPersonlikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input NutritionTargetsSettingspersonPersonlikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input NutritionTargetsSettingspersonPersonlikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input NutritionTargetsSettingspersonPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-  persons: [NutritionTargetsSettingspersonPersonlimitationProfileLimitationProfilepersonsPerson!]
-}
-
-input NutritionTargetsSettingspersonPersonlimitationProfileLimitationProfilepersonsPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input NutritionTargetsSettingspersonPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  meal: NutritionTargetsSettingspersonPersonmealSettingsMealSettingsmealMeal
-}
-
-input NutritionTargetsSettingspersonPersonmealSettingsMealSettingsmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input NutritionTargetsSettingspersonPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  microTargetsDaysIds: [ID!]
-  microTargetsDays: [NutritionTargetsSettingspersonPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
-}
-
-input NutritionTargetsSettingspersonPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
-  microTargetsSettingsId: ID
-  microTargetsIds: [ID!]
-}
-
-input NutritionTargetsSettingspersonPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  food: NutritionTargetsSettingspersonPersonservingServingfoodFood
-}
-
-input NutritionTargetsSettingspersonPersonservingServingfoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
+  mealSettings: [PersonmealSettingsMealSettings!]
 }
 
 type NutritionValues implements Node {
@@ -7222,94 +4708,10 @@ input NutritionValuesFilter {
 
 input NutritionValuesingredientIngredient {
   recipeId: ID
-  recipe: NutritionValuesingredientIngredientrecipeRecipe
+  recipe: IngredientrecipeRecipe
   userId: ID
   foodItemsIds: [ID!]
-  foodItems: [NutritionValuesingredientIngredientfoodItemsFoodItem!]
-}
-
-input NutritionValuesingredientIngredientfoodItemsFoodItem {
-  amount: Float
-  pantryItemId: ID
-  pantryItem: NutritionValuesingredientIngredientfoodItemsFoodItempantryItemPantryItem
-}
-
-input NutritionValuesingredientIngredientfoodItemsFoodItempantryItemPantryItem {
-  foodItemId: ID
-  userId: ID
-}
-
-input NutritionValuesingredientIngredientrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: NutritionValuesingredientIngredientrecipeRecipefoodFood
-  imgId: ID
-  img: NutritionValuesingredientIngredientrecipeRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: NutritionValuesingredientIngredientrecipeRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [NutritionValuesingredientIngredientrecipeRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [NutritionValuesingredientIngredientrecipeRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [NutritionValuesingredientIngredientrecipeRecipelikedByPerson!]
-}
-
-input NutritionValuesingredientIngredientrecipeRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input NutritionValuesingredientIngredientrecipeRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input NutritionValuesingredientIngredientrecipeRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input NutritionValuesingredientIngredientrecipeRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input NutritionValuesingredientIngredientrecipeRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input NutritionValuesingredientIngredientrecipeRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
+  foodItems: [IngredientfoodItemsFoodItem!]
 }
 
 enum NutritionValuesOrderBy {
@@ -7322,247 +4724,19 @@ enum NutritionValuesOrderBy {
 }
 
 input NutritionValuesrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   public: Boolean
   foodId: ID
-  food: NutritionValuesrecipeRecipefoodFood
+  food: RecipefoodFood
   imgId: ID
-  img: NutritionValuesrecipeRecipeimgFile
+  img: RecipeimgFile
   userId: ID
   dislikedByIds: [ID!]
-  dislikedBy: [NutritionValuesrecipeRecipedislikedByPerson!]
+  dislikedBy: [RecipedislikedByPerson!]
   ingredientsIds: [ID!]
-  ingredients: [NutritionValuesrecipeRecipeingredientsIngredient!]
+  ingredients: [RecipeingredientsIngredient!]
   likedByIds: [ID!]
-  likedBy: [NutritionValuesrecipeRecipelikedByPerson!]
-}
-
-input NutritionValuesrecipeRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: NutritionValuesrecipeRecipedislikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: NutritionValuesrecipeRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: NutritionValuesrecipeRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: NutritionValuesrecipeRecipedislikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: NutritionValuesrecipeRecipedislikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [NutritionValuesrecipeRecipedislikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [NutritionValuesrecipeRecipedislikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [NutritionValuesrecipeRecipedislikedByPersonmealSettingsMealSettings!]
-}
-
-input NutritionValuesrecipeRecipedislikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipedislikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipedislikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipedislikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input NutritionValuesrecipeRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipedislikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input NutritionValuesrecipeRecipedislikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input NutritionValuesrecipeRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  meal: NutritionValuesrecipeRecipefoodFoodmealMeal
-  leftoversIds: [ID!]
-  leftovers: [NutritionValuesrecipeRecipefoodFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [NutritionValuesrecipeRecipefoodFoodservingsServing!]
-}
-
-input NutritionValuesrecipeRecipefoodFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipefoodFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipefoodFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input NutritionValuesrecipeRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  kitchenUtensilImg: NutritionValuesrecipeRecipeimgFilekitchenUtensilImgKitchenUtensil
-}
-
-input NutritionValuesrecipeRecipeimgFilekitchenUtensilImgKitchenUtensil {
-  type: KITCHEN_UTENSIL_TYPE!
-  imgId: ID
-}
-
-input NutritionValuesrecipeRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  nutritionValues: NutritionValuesrecipeRecipeingredientsIngredientnutritionValuesNutritionValues
-  userId: ID
-  foodItemsIds: [ID!]
-  foodItems: [NutritionValuesrecipeRecipeingredientsIngredientfoodItemsFoodItem!]
-}
-
-input NutritionValuesrecipeRecipeingredientsIngredientfoodItemsFoodItem {
-  amount: Float
-  ingredientId: ID
-  pantryItemId: ID
-}
-
-input NutritionValuesrecipeRecipeingredientsIngredientnutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input NutritionValuesrecipeRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: NutritionValuesrecipeRecipelikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: NutritionValuesrecipeRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: NutritionValuesrecipeRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: NutritionValuesrecipeRecipelikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: NutritionValuesrecipeRecipelikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [NutritionValuesrecipeRecipelikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [NutritionValuesrecipeRecipelikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [NutritionValuesrecipeRecipelikedByPersonmealSettingsMealSettings!]
-}
-
-input NutritionValuesrecipeRecipelikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipelikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipelikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipelikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input NutritionValuesrecipeRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input NutritionValuesrecipeRecipelikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input NutritionValuesrecipeRecipelikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
+  likedBy: [RecipelikedByPerson!]
 }
 
 # Information about pagination in a connection.
@@ -7706,40 +4880,7 @@ input PantryItemFilter {
 input PantryItemfoodItemFoodItem {
   amount: Float
   ingredientId: ID
-  ingredient: PantryItemfoodItemFoodItemingredientIngredient
-}
-
-input PantryItemfoodItemFoodItemingredientIngredient {
-  nutritionValuesId: ID
-  nutritionValues: PantryItemfoodItemFoodItemingredientIngredientnutritionValuesNutritionValues
-  recipeId: ID
-  recipe: PantryItemfoodItemFoodItemingredientIngredientrecipeRecipe
-  userId: ID
-  foodItemsIds: [ID!]
-  foodItems: [PantryItemfoodItemFoodItemingredientIngredientfoodItemsFoodItem!]
-}
-
-input PantryItemfoodItemFoodItemingredientIngredientfoodItemsFoodItem {
-  amount: Float
-  ingredientId: ID
-  pantryItemId: ID
-}
-
-input PantryItemfoodItemFoodItemingredientIngredientnutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input PantryItemfoodItemFoodItemingredientIngredientrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
+  ingredient: FoodItemingredientIngredient
 }
 
 enum PantryItemOrderBy {
@@ -7903,241 +5044,20 @@ input PersonalDatapersonPerson {
   family: Boolean
   name: String!
   limitationProfileId: ID
-  limitationProfile: PersonalDatapersonPersonlimitationProfileLimitationProfile
+  limitationProfile: PersonlimitationProfileLimitationProfile
   microTargetsSettingsId: ID
-  microTargetsSettings: PersonalDatapersonPersonmicroTargetsSettingsMicroTargetsSettings
+  microTargetsSettings: PersonmicroTargetsSettingsMicroTargetsSettings
   nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: PersonalDatapersonPersonnutritionTargetsSettingsNutritionTargetsSettings
+  nutritionTargetsSettings: PersonnutritionTargetsSettingsNutritionTargetsSettings
   servingId: ID
-  serving: PersonalDatapersonPersonservingServing
+  serving: PersonservingServing
   userId: ID
   dislikedRecipesIds: [ID!]
-  dislikedRecipes: [PersonalDatapersonPersondislikedRecipesRecipe!]
+  dislikedRecipes: [PersondislikedRecipesRecipe!]
   likedRecipesIds: [ID!]
-  likedRecipes: [PersonalDatapersonPersonlikedRecipesRecipe!]
+  likedRecipes: [PersonlikedRecipesRecipe!]
   mealSettingsIds: [ID!]
-  mealSettings: [PersonalDatapersonPersonmealSettingsMealSettings!]
-}
-
-input PersonalDatapersonPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: PersonalDatapersonPersondislikedRecipesRecipefoodFood
-  imgId: ID
-  img: PersonalDatapersonPersondislikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: PersonalDatapersonPersondislikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [PersonalDatapersonPersondislikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [PersonalDatapersonPersondislikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [PersonalDatapersonPersondislikedRecipesRecipelikedByPerson!]
-}
-
-input PersonalDatapersonPersondislikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input PersonalDatapersonPersondislikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input PersonalDatapersonPersondislikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input PersonalDatapersonPersondislikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input PersonalDatapersonPersondislikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input PersonalDatapersonPersondislikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input PersonalDatapersonPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: PersonalDatapersonPersonlikedRecipesRecipefoodFood
-  imgId: ID
-  img: PersonalDatapersonPersonlikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: PersonalDatapersonPersonlikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [PersonalDatapersonPersonlikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [PersonalDatapersonPersonlikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [PersonalDatapersonPersonlikedRecipesRecipelikedByPerson!]
-}
-
-input PersonalDatapersonPersonlikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input PersonalDatapersonPersonlikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input PersonalDatapersonPersonlikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input PersonalDatapersonPersonlikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input PersonalDatapersonPersonlikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input PersonalDatapersonPersonlikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input PersonalDatapersonPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-  persons: [PersonalDatapersonPersonlimitationProfileLimitationProfilepersonsPerson!]
-}
-
-input PersonalDatapersonPersonlimitationProfileLimitationProfilepersonsPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input PersonalDatapersonPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  meal: PersonalDatapersonPersonmealSettingsMealSettingsmealMeal
-}
-
-input PersonalDatapersonPersonmealSettingsMealSettingsmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input PersonalDatapersonPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  microTargetsDaysIds: [ID!]
-  microTargetsDays: [PersonalDatapersonPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
-}
-
-input PersonalDatapersonPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
-  microTargetsSettingsId: ID
-  microTargetsIds: [ID!]
-}
-
-input PersonalDatapersonPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  nutritionTargetsDaysIds: [ID!]
-  nutritionTargetsDays: [PersonalDatapersonPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
-}
-
-input PersonalDatapersonPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
-  nutritionTargetsSettingsId: ID
-}
-
-input PersonalDatapersonPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  food: PersonalDatapersonPersonservingServingfoodFood
-}
-
-input PersonalDatapersonPersonservingServingfoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
+  mealSettings: [PersonmealSettingsMealSettings!]
 }
 
 # A connection to a list of items.
@@ -8153,261 +5073,21 @@ type PersonConnection {
 }
 
 input PersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   public: Boolean
   foodId: ID
-  food: PersondislikedRecipesRecipefoodFood
+  food: RecipefoodFood
   imgId: ID
-  img: PersondislikedRecipesRecipeimgFile
+  img: RecipeimgFile
   nutritionValuesId: ID
-  nutritionValues: PersondislikedRecipesRecipenutritionValuesNutritionValues
+  nutritionValues: RecipenutritionValuesNutritionValues
   userId: ID
   dislikedByIds: [ID!]
-  dislikedBy: [PersondislikedRecipesRecipedislikedByPerson!]
+  dislikedBy: [RecipedislikedByPerson!]
   ingredientsIds: [ID!]
-  ingredients: [PersondislikedRecipesRecipeingredientsIngredient!]
+  ingredients: [RecipeingredientsIngredient!]
   likedByIds: [ID!]
-  likedBy: [PersondislikedRecipesRecipelikedByPerson!]
-}
-
-input PersondislikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: PersondislikedRecipesRecipedislikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: PersondislikedRecipesRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: PersondislikedRecipesRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: PersondislikedRecipesRecipedislikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: PersondislikedRecipesRecipedislikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [PersondislikedRecipesRecipedislikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [PersondislikedRecipesRecipedislikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [PersondislikedRecipesRecipedislikedByPersonmealSettingsMealSettings!]
-}
-
-input PersondislikedRecipesRecipedislikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input PersondislikedRecipesRecipedislikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input PersondislikedRecipesRecipedislikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input PersondislikedRecipesRecipedislikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input PersondislikedRecipesRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input PersondislikedRecipesRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input PersondislikedRecipesRecipedislikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input PersondislikedRecipesRecipedislikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input PersondislikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  meal: PersondislikedRecipesRecipefoodFoodmealMeal
-  leftoversIds: [ID!]
-  leftovers: [PersondislikedRecipesRecipefoodFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [PersondislikedRecipesRecipefoodFoodservingsServing!]
-}
-
-input PersondislikedRecipesRecipefoodFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input PersondislikedRecipesRecipefoodFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input PersondislikedRecipesRecipefoodFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input PersondislikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  kitchenUtensilImg: PersondislikedRecipesRecipeimgFilekitchenUtensilImgKitchenUtensil
-}
-
-input PersondislikedRecipesRecipeimgFilekitchenUtensilImgKitchenUtensil {
-  type: KITCHEN_UTENSIL_TYPE!
-  imgId: ID
-}
-
-input PersondislikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  nutritionValues: PersondislikedRecipesRecipeingredientsIngredientnutritionValuesNutritionValues
-  userId: ID
-  foodItemsIds: [ID!]
-  foodItems: [PersondislikedRecipesRecipeingredientsIngredientfoodItemsFoodItem!]
-}
-
-input PersondislikedRecipesRecipeingredientsIngredientfoodItemsFoodItem {
-  amount: Float
-  ingredientId: ID
-  pantryItemId: ID
-}
-
-input PersondislikedRecipesRecipeingredientsIngredientnutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input PersondislikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: PersondislikedRecipesRecipelikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: PersondislikedRecipesRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: PersondislikedRecipesRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: PersondislikedRecipesRecipelikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: PersondislikedRecipesRecipelikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [PersondislikedRecipesRecipelikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [PersondislikedRecipesRecipelikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [PersondislikedRecipesRecipelikedByPersonmealSettingsMealSettings!]
-}
-
-input PersondislikedRecipesRecipelikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input PersondislikedRecipesRecipelikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input PersondislikedRecipesRecipelikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input PersondislikedRecipesRecipelikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input PersondislikedRecipesRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input PersondislikedRecipesRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input PersondislikedRecipesRecipelikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input PersondislikedRecipesRecipelikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input PersondislikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  ingredient: PersondislikedRecipesRecipenutritionValuesNutritionValuesingredientIngredient
-}
-
-input PersondislikedRecipesRecipenutritionValuesNutritionValuesingredientIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
+  likedBy: [RecipelikedByPerson!]
 }
 
 # An edge in a connection.
@@ -8571,403 +5251,46 @@ input PersonFilter {
 }
 
 input PersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   public: Boolean
   foodId: ID
-  food: PersonlikedRecipesRecipefoodFood
+  food: RecipefoodFood
   imgId: ID
-  img: PersonlikedRecipesRecipeimgFile
+  img: RecipeimgFile
   nutritionValuesId: ID
-  nutritionValues: PersonlikedRecipesRecipenutritionValuesNutritionValues
+  nutritionValues: RecipenutritionValuesNutritionValues
   userId: ID
   dislikedByIds: [ID!]
-  dislikedBy: [PersonlikedRecipesRecipedislikedByPerson!]
+  dislikedBy: [RecipedislikedByPerson!]
   ingredientsIds: [ID!]
-  ingredients: [PersonlikedRecipesRecipeingredientsIngredient!]
+  ingredients: [RecipeingredientsIngredient!]
   likedByIds: [ID!]
-  likedBy: [PersonlikedRecipesRecipelikedByPerson!]
-}
-
-input PersonlikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: PersonlikedRecipesRecipedislikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: PersonlikedRecipesRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: PersonlikedRecipesRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: PersonlikedRecipesRecipedislikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: PersonlikedRecipesRecipedislikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [PersonlikedRecipesRecipedislikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [PersonlikedRecipesRecipedislikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [PersonlikedRecipesRecipedislikedByPersonmealSettingsMealSettings!]
-}
-
-input PersonlikedRecipesRecipedislikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input PersonlikedRecipesRecipedislikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input PersonlikedRecipesRecipedislikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input PersonlikedRecipesRecipedislikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input PersonlikedRecipesRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input PersonlikedRecipesRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input PersonlikedRecipesRecipedislikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input PersonlikedRecipesRecipedislikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input PersonlikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  meal: PersonlikedRecipesRecipefoodFoodmealMeal
-  leftoversIds: [ID!]
-  leftovers: [PersonlikedRecipesRecipefoodFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [PersonlikedRecipesRecipefoodFoodservingsServing!]
-}
-
-input PersonlikedRecipesRecipefoodFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input PersonlikedRecipesRecipefoodFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input PersonlikedRecipesRecipefoodFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input PersonlikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  kitchenUtensilImg: PersonlikedRecipesRecipeimgFilekitchenUtensilImgKitchenUtensil
-}
-
-input PersonlikedRecipesRecipeimgFilekitchenUtensilImgKitchenUtensil {
-  type: KITCHEN_UTENSIL_TYPE!
-  imgId: ID
-}
-
-input PersonlikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  nutritionValues: PersonlikedRecipesRecipeingredientsIngredientnutritionValuesNutritionValues
-  userId: ID
-  foodItemsIds: [ID!]
-  foodItems: [PersonlikedRecipesRecipeingredientsIngredientfoodItemsFoodItem!]
-}
-
-input PersonlikedRecipesRecipeingredientsIngredientfoodItemsFoodItem {
-  amount: Float
-  ingredientId: ID
-  pantryItemId: ID
-}
-
-input PersonlikedRecipesRecipeingredientsIngredientnutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input PersonlikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: PersonlikedRecipesRecipelikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: PersonlikedRecipesRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: PersonlikedRecipesRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: PersonlikedRecipesRecipelikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: PersonlikedRecipesRecipelikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [PersonlikedRecipesRecipelikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [PersonlikedRecipesRecipelikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [PersonlikedRecipesRecipelikedByPersonmealSettingsMealSettings!]
-}
-
-input PersonlikedRecipesRecipelikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input PersonlikedRecipesRecipelikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input PersonlikedRecipesRecipelikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input PersonlikedRecipesRecipelikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input PersonlikedRecipesRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input PersonlikedRecipesRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input PersonlikedRecipesRecipelikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input PersonlikedRecipesRecipelikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input PersonlikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  ingredient: PersonlikedRecipesRecipenutritionValuesNutritionValuesingredientIngredient
-}
-
-input PersonlikedRecipesRecipenutritionValuesNutritionValuesingredientIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
+  likedBy: [RecipelikedByPerson!]
 }
 
 input PersonlimitationProfileLimitationProfile {
   name: String!
   userId: ID
   personsIds: [ID!]
-  persons: [PersonlimitationProfileLimitationProfilepersonsPerson!]
-}
-
-input PersonlimitationProfileLimitationProfilepersonsPerson {
-  family: Boolean
-  name: String!
-  microTargetsSettingsId: ID
-  microTargetsSettings: PersonlimitationProfileLimitationProfilepersonsPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: PersonlimitationProfileLimitationProfilepersonsPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: PersonlimitationProfileLimitationProfilepersonsPersonpersonalDataPersonalData
-  servingId: ID
-  serving: PersonlimitationProfileLimitationProfilepersonsPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [PersonlimitationProfileLimitationProfilepersonsPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [PersonlimitationProfileLimitationProfilepersonsPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [PersonlimitationProfileLimitationProfilepersonsPersonmealSettingsMealSettings!]
-}
-
-input PersonlimitationProfileLimitationProfilepersonsPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input PersonlimitationProfileLimitationProfilepersonsPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input PersonlimitationProfileLimitationProfilepersonsPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input PersonlimitationProfileLimitationProfilepersonsPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input PersonlimitationProfileLimitationProfilepersonsPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input PersonlimitationProfileLimitationProfilepersonsPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input PersonlimitationProfileLimitationProfilepersonsPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
+  persons: [LimitationProfilepersonsPerson!]
 }
 
 input PersonmealSettingsMealSettings {
   default: Boolean
   mealId: ID
-  meal: PersonmealSettingsMealSettingsmealMeal
-}
-
-input PersonmealSettingsMealSettingsmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  foods: [PersonmealSettingsMealSettingsmealMealfoodsFood!]
-  mealSettingsIds: [ID!]
-  mealSettings: [PersonmealSettingsMealSettingsmealMealmealSettingsMealSettings!]
-}
-
-input PersonmealSettingsMealSettingsmealMealfoodsFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input PersonmealSettingsMealSettingsmealMealmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
+  meal: MealSettingsmealMeal
 }
 
 input PersonmicroTargetsSettingsMicroTargetsSettings {
   daily: Boolean
   microTargetsDaysIds: [ID!]
-  microTargetsDays: [PersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
-}
-
-input PersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
-  microTargetsIds: [ID!]
-  microTargets: [PersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDaymicroTargetsMicroTarget!]
-}
-
-input PersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDaymicroTargetsMicroTarget {
-  max: Float
-  min: Float
-  name: String!
-  unit: String!
-  microTargetDayId: ID
+  microTargetsDays: [MicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
 }
 
 input PersonnutritionTargetsSettingsNutritionTargetsSettings {
   daily: Boolean
   nutritionTargetsDaysIds: [ID!]
-  nutritionTargetsDays: [PersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
-}
-
-input PersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
+  nutritionTargetsDays: [NutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
 }
 
 enum PersonOrderBy {
@@ -8987,57 +5310,7 @@ input PersonservingServing {
   guest: Boolean
   size: Float
   foodId: ID
-  food: PersonservingServingfoodFood
-}
-
-input PersonservingServingfoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  meal: PersonservingServingfoodFoodmealMeal
-  recipeId: ID
-  recipe: PersonservingServingfoodFoodrecipeRecipe
-  leftoversIds: [ID!]
-  leftovers: [PersonservingServingfoodFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [PersonservingServingfoodFoodservingsServing!]
-}
-
-input PersonservingServingfoodFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input PersonservingServingfoodFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input PersonservingServingfoodFoodrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input PersonservingServingfoodFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
+  food: ServingfoodFood
 }
 
 type Query {
@@ -9058,24 +5331,11 @@ type Recipe implements Node {
   img(filter: FileFilter): File
   ingredients(filter: IngredientFilter, orderBy: IngredientOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): IngredientConnection
   likedBy(filter: PersonFilter, orderBy: PersonOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): PersonConnection
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   nutritionValues(filter: NutritionValuesFilter): NutritionValues
   public: Boolean!
   updatedAt: DateTime!
   user(filter: UserFilter): User
-}
-
-enum RECIPE_MEAL_CATEGORIES {
-  Breakfast
-  Fruit
-  Vegetable
-  Main
-  Side
-  Snack
-  Dessert
-  Drink
-  Shake
-  Bread
 }
 
 # A connection to a list of items.
@@ -9094,242 +5354,21 @@ input RecipedislikedByPerson {
   family: Boolean
   name: String!
   limitationProfileId: ID
-  limitationProfile: RecipedislikedByPersonlimitationProfileLimitationProfile
+  limitationProfile: PersonlimitationProfileLimitationProfile
   microTargetsSettingsId: ID
-  microTargetsSettings: RecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings
+  microTargetsSettings: PersonmicroTargetsSettingsMicroTargetsSettings
   nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: RecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
+  nutritionTargetsSettings: PersonnutritionTargetsSettingsNutritionTargetsSettings
   personalDataId: ID
   servingId: ID
-  serving: RecipedislikedByPersonservingServing
+  serving: PersonservingServing
   userId: ID
   dislikedRecipesIds: [ID!]
-  dislikedRecipes: [RecipedislikedByPersondislikedRecipesRecipe!]
+  dislikedRecipes: [PersondislikedRecipesRecipe!]
   likedRecipesIds: [ID!]
-  likedRecipes: [RecipedislikedByPersonlikedRecipesRecipe!]
+  likedRecipes: [PersonlikedRecipesRecipe!]
   mealSettingsIds: [ID!]
-  mealSettings: [RecipedislikedByPersonmealSettingsMealSettings!]
-}
-
-input RecipedislikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: RecipedislikedByPersondislikedRecipesRecipefoodFood
-  imgId: ID
-  img: RecipedislikedByPersondislikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: RecipedislikedByPersondislikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [RecipedislikedByPersondislikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [RecipedislikedByPersondislikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [RecipedislikedByPersondislikedRecipesRecipelikedByPerson!]
-}
-
-input RecipedislikedByPersondislikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipedislikedByPersondislikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input RecipedislikedByPersondislikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input RecipedislikedByPersondislikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input RecipedislikedByPersondislikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipedislikedByPersondislikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input RecipedislikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: RecipedislikedByPersonlikedRecipesRecipefoodFood
-  imgId: ID
-  img: RecipedislikedByPersonlikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: RecipedislikedByPersonlikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [RecipedislikedByPersonlikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [RecipedislikedByPersonlikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [RecipedislikedByPersonlikedRecipesRecipelikedByPerson!]
-}
-
-input RecipedislikedByPersonlikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipedislikedByPersonlikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input RecipedislikedByPersonlikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input RecipedislikedByPersonlikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input RecipedislikedByPersonlikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipedislikedByPersonlikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input RecipedislikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-  persons: [RecipedislikedByPersonlimitationProfileLimitationProfilepersonsPerson!]
-}
-
-input RecipedislikedByPersonlimitationProfileLimitationProfilepersonsPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipedislikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  meal: RecipedislikedByPersonmealSettingsMealSettingsmealMeal
-}
-
-input RecipedislikedByPersonmealSettingsMealSettingsmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  microTargetsDaysIds: [ID!]
-  microTargetsDays: [RecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
-}
-
-input RecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
-  microTargetsSettingsId: ID
-  microTargetsIds: [ID!]
-}
-
-input RecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  nutritionTargetsDaysIds: [ID!]
-  nutritionTargetsDays: [RecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
-}
-
-input RecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
-  nutritionTargetsSettingsId: ID
-}
-
-input RecipedislikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  food: RecipedislikedByPersonservingServingfoodFood
-}
-
-input RecipedislikedByPersonservingServingfoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
+  mealSettings: [PersonmealSettingsMealSettings!]
 }
 
 # An edge in a connection.
@@ -9454,413 +5493,51 @@ input RecipefoodFood {
   eaten: Boolean
   pos: Int
   mealId: ID
-  meal: RecipefoodFoodmealMeal
+  meal: FoodmealMeal
   leftoversIds: [ID!]
-  leftovers: [RecipefoodFoodleftoversFood!]
+  leftovers: [FoodleftoversFood!]
   servingsIds: [ID!]
-  servings: [RecipefoodFoodservingsServing!]
-}
-
-input RecipefoodFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  meal: RecipefoodFoodleftoversFoodmealMeal
-  leftoversIds: [ID!]
-  leftovers: [RecipefoodFoodleftoversFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [RecipefoodFoodleftoversFoodservingsServing!]
-}
-
-input RecipefoodFoodleftoversFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input RecipefoodFoodleftoversFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipefoodFoodleftoversFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input RecipefoodFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  foods: [RecipefoodFoodmealMealfoodsFood!]
-  mealSettingsIds: [ID!]
-  mealSettings: [RecipefoodFoodmealMealmealSettingsMealSettings!]
-}
-
-input RecipefoodFoodmealMealfoodsFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input RecipefoodFoodmealMealmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input RecipefoodFoodservingsServing {
-  guest: Boolean
-  size: Float
-  personId: ID
-  person: RecipefoodFoodservingsServingpersonPerson
-}
-
-input RecipefoodFoodservingsServingpersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
+  servings: [FoodservingsServing!]
 }
 
 input RecipeimgFile {
   name: String!
   kitchenUtensilImgId: ID
-  kitchenUtensilImg: RecipeimgFilekitchenUtensilImgKitchenUtensil
-}
-
-input RecipeimgFilekitchenUtensilImgKitchenUtensil {
-  type: KITCHEN_UTENSIL_TYPE!
+  kitchenUtensilImg: FilekitchenUtensilImgKitchenUtensil
 }
 
 input RecipeingredientsIngredient {
   nutritionValuesId: ID
-  nutritionValues: RecipeingredientsIngredientnutritionValuesNutritionValues
+  nutritionValues: IngredientnutritionValuesNutritionValues
   userId: ID
   foodItemsIds: [ID!]
-  foodItems: [RecipeingredientsIngredientfoodItemsFoodItem!]
-}
-
-input RecipeingredientsIngredientfoodItemsFoodItem {
-  amount: Float
-  pantryItemId: ID
-  pantryItem: RecipeingredientsIngredientfoodItemsFoodItempantryItemPantryItem
-}
-
-input RecipeingredientsIngredientfoodItemsFoodItempantryItemPantryItem {
-  foodItemId: ID
-  userId: ID
-}
-
-input RecipeingredientsIngredientnutritionValuesNutritionValues {
-  recipeId: ID
-  recipe: RecipeingredientsIngredientnutritionValuesNutritionValuesrecipeRecipe
-}
-
-input RecipeingredientsIngredientnutritionValuesNutritionValuesrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
+  foodItems: [IngredientfoodItemsFoodItem!]
 }
 
 input RecipelikedByPerson {
   family: Boolean
   name: String!
   limitationProfileId: ID
-  limitationProfile: RecipelikedByPersonlimitationProfileLimitationProfile
+  limitationProfile: PersonlimitationProfileLimitationProfile
   microTargetsSettingsId: ID
-  microTargetsSettings: RecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings
+  microTargetsSettings: PersonmicroTargetsSettingsMicroTargetsSettings
   nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: RecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
+  nutritionTargetsSettings: PersonnutritionTargetsSettingsNutritionTargetsSettings
   personalDataId: ID
   servingId: ID
-  serving: RecipelikedByPersonservingServing
+  serving: PersonservingServing
   userId: ID
   dislikedRecipesIds: [ID!]
-  dislikedRecipes: [RecipelikedByPersondislikedRecipesRecipe!]
+  dislikedRecipes: [PersondislikedRecipesRecipe!]
   likedRecipesIds: [ID!]
-  likedRecipes: [RecipelikedByPersonlikedRecipesRecipe!]
+  likedRecipes: [PersonlikedRecipesRecipe!]
   mealSettingsIds: [ID!]
-  mealSettings: [RecipelikedByPersonmealSettingsMealSettings!]
-}
-
-input RecipelikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: RecipelikedByPersondislikedRecipesRecipefoodFood
-  imgId: ID
-  img: RecipelikedByPersondislikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: RecipelikedByPersondislikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [RecipelikedByPersondislikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [RecipelikedByPersondislikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [RecipelikedByPersondislikedRecipesRecipelikedByPerson!]
-}
-
-input RecipelikedByPersondislikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipelikedByPersondislikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input RecipelikedByPersondislikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input RecipelikedByPersondislikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input RecipelikedByPersondislikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipelikedByPersondislikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input RecipelikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: RecipelikedByPersonlikedRecipesRecipefoodFood
-  imgId: ID
-  img: RecipelikedByPersonlikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: RecipelikedByPersonlikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [RecipelikedByPersonlikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [RecipelikedByPersonlikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [RecipelikedByPersonlikedRecipesRecipelikedByPerson!]
-}
-
-input RecipelikedByPersonlikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipelikedByPersonlikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input RecipelikedByPersonlikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input RecipelikedByPersonlikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input RecipelikedByPersonlikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipelikedByPersonlikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input RecipelikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-  persons: [RecipelikedByPersonlimitationProfileLimitationProfilepersonsPerson!]
-}
-
-input RecipelikedByPersonlimitationProfileLimitationProfilepersonsPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipelikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  meal: RecipelikedByPersonmealSettingsMealSettingsmealMeal
-}
-
-input RecipelikedByPersonmealSettingsMealSettingsmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input RecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  microTargetsDaysIds: [ID!]
-  microTargetsDays: [RecipelikedByPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
-}
-
-input RecipelikedByPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
-  microTargetsSettingsId: ID
-  microTargetsIds: [ID!]
-}
-
-input RecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  nutritionTargetsDaysIds: [ID!]
-  nutritionTargetsDays: [RecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
-}
-
-input RecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
-  nutritionTargetsSettingsId: ID
-}
-
-input RecipelikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  food: RecipelikedByPersonservingServingfoodFood
-}
-
-input RecipelikedByPersonservingServingfoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
+  mealSettings: [PersonmealSettingsMealSettings!]
 }
 
 input RecipenutritionValuesNutritionValues {
   ingredientId: ID
-  ingredient: RecipenutritionValuesNutritionValuesingredientIngredient
-}
-
-input RecipenutritionValuesNutritionValuesingredientIngredient {
-  recipeId: ID
-  recipe: RecipenutritionValuesNutritionValuesingredientIngredientrecipeRecipe
-  userId: ID
-  foodItemsIds: [ID!]
-  foodItems: [RecipenutritionValuesNutritionValuesingredientIngredientfoodItemsFoodItem!]
-}
-
-input RecipenutritionValuesNutritionValuesingredientIngredientfoodItemsFoodItem {
-  amount: Float
-  ingredientId: ID
-  pantryItemId: ID
-}
-
-input RecipenutritionValuesNutritionValuesingredientIngredientrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
+  ingredient: NutritionValuesingredientIngredient
 }
 
 enum RecipeOrderBy {
@@ -10314,172 +5991,13 @@ input ServingfoodFood {
   eaten: Boolean
   pos: Int
   mealId: ID
-  meal: ServingfoodFoodmealMeal
+  meal: FoodmealMeal
   recipeId: ID
-  recipe: ServingfoodFoodrecipeRecipe
+  recipe: FoodrecipeRecipe
   leftoversIds: [ID!]
-  leftovers: [ServingfoodFoodleftoversFood!]
+  leftovers: [FoodleftoversFood!]
   servingsIds: [ID!]
-  servings: [ServingfoodFoodservingsServing!]
-}
-
-input ServingfoodFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  meal: ServingfoodFoodleftoversFoodmealMeal
-  recipeId: ID
-  recipe: ServingfoodFoodleftoversFoodrecipeRecipe
-  leftoversIds: [ID!]
-  leftovers: [ServingfoodFoodleftoversFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [ServingfoodFoodleftoversFoodservingsServing!]
-}
-
-input ServingfoodFoodleftoversFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input ServingfoodFoodleftoversFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input ServingfoodFoodleftoversFoodrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input ServingfoodFoodleftoversFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input ServingfoodFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  foods: [ServingfoodFoodmealMealfoodsFood!]
-  mealSettingsIds: [ID!]
-  mealSettings: [ServingfoodFoodmealMealmealSettingsMealSettings!]
-}
-
-input ServingfoodFoodmealMealfoodsFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input ServingfoodFoodmealMealmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input ServingfoodFoodrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  imgId: ID
-  img: ServingfoodFoodrecipeRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: ServingfoodFoodrecipeRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [ServingfoodFoodrecipeRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [ServingfoodFoodrecipeRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [ServingfoodFoodrecipeRecipelikedByPerson!]
-}
-
-input ServingfoodFoodrecipeRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input ServingfoodFoodrecipeRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input ServingfoodFoodrecipeRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input ServingfoodFoodrecipeRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input ServingfoodFoodrecipeRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input ServingfoodFoodservingsServing {
-  guest: Boolean
-  size: Float
-  personId: ID
-  person: ServingfoodFoodservingsServingpersonPerson
-}
-
-input ServingfoodFoodservingsServingpersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
+  servings: [FoodservingsServing!]
 }
 
 enum ServingOrderBy {
@@ -10499,224 +6017,19 @@ input ServingpersonPerson {
   family: Boolean
   name: String!
   limitationProfileId: ID
-  limitationProfile: ServingpersonPersonlimitationProfileLimitationProfile
+  limitationProfile: PersonlimitationProfileLimitationProfile
   microTargetsSettingsId: ID
-  microTargetsSettings: ServingpersonPersonmicroTargetsSettingsMicroTargetsSettings
+  microTargetsSettings: PersonmicroTargetsSettingsMicroTargetsSettings
   nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: ServingpersonPersonnutritionTargetsSettingsNutritionTargetsSettings
+  nutritionTargetsSettings: PersonnutritionTargetsSettingsNutritionTargetsSettings
   personalDataId: ID
   userId: ID
   dislikedRecipesIds: [ID!]
-  dislikedRecipes: [ServingpersonPersondislikedRecipesRecipe!]
+  dislikedRecipes: [PersondislikedRecipesRecipe!]
   likedRecipesIds: [ID!]
-  likedRecipes: [ServingpersonPersonlikedRecipesRecipe!]
+  likedRecipes: [PersonlikedRecipesRecipe!]
   mealSettingsIds: [ID!]
-  mealSettings: [ServingpersonPersonmealSettingsMealSettings!]
-}
-
-input ServingpersonPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: ServingpersonPersondislikedRecipesRecipefoodFood
-  imgId: ID
-  img: ServingpersonPersondislikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: ServingpersonPersondislikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [ServingpersonPersondislikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [ServingpersonPersondislikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [ServingpersonPersondislikedRecipesRecipelikedByPerson!]
-}
-
-input ServingpersonPersondislikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input ServingpersonPersondislikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input ServingpersonPersondislikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input ServingpersonPersondislikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input ServingpersonPersondislikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input ServingpersonPersondislikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input ServingpersonPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: ServingpersonPersonlikedRecipesRecipefoodFood
-  imgId: ID
-  img: ServingpersonPersonlikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: ServingpersonPersonlikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [ServingpersonPersonlikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [ServingpersonPersonlikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [ServingpersonPersonlikedRecipesRecipelikedByPerson!]
-}
-
-input ServingpersonPersonlikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input ServingpersonPersonlikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input ServingpersonPersonlikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input ServingpersonPersonlikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input ServingpersonPersonlikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input ServingpersonPersonlikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input ServingpersonPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-  persons: [ServingpersonPersonlimitationProfileLimitationProfilepersonsPerson!]
-}
-
-input ServingpersonPersonlimitationProfileLimitationProfilepersonsPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input ServingpersonPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  meal: ServingpersonPersonmealSettingsMealSettingsmealMeal
-}
-
-input ServingpersonPersonmealSettingsMealSettingsmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input ServingpersonPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  microTargetsDaysIds: [ID!]
-  microTargetsDays: [ServingpersonPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
-}
-
-input ServingpersonPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
-  microTargetsSettingsId: ID
-  microTargetsIds: [ID!]
-}
-
-input ServingpersonPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  nutritionTargetsDaysIds: [ID!]
-  nutritionTargetsDays: [ServingpersonPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
-}
-
-input ServingpersonPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
-  nutritionTargetsSettingsId: ID
+  mealSettings: [PersonmealSettingsMealSettings!]
 }
 
 type SetFoodRecipePayload {
@@ -10832,7 +6145,8 @@ input SigninUserInput {
 }
 
 input SignupUserInput {
-  kitchenUtensils: [USER_KITCHEN_UTENSILS!]
+  auth0UserId: String
+  kitchenUtensils: [KitchenUtensils!]
   publicName: String
   appSettingsId: ID
   limitationProfilesIds: [ID!]
@@ -11204,14 +6518,14 @@ type UpdateIngredientPayload {
 
 input UpdateKitchenUtensil {
   id: ID!
-  type: KITCHEN_UTENSIL_TYPE
+  type: KitchenUtensils
   imgId: ID
   img: KitchenUtensilimgFile
 }
 
 input UpdateKitchenUtensilInput {
   id: ID!
-  type: KITCHEN_UTENSIL_TYPE
+  type: KitchenUtensils
   imgId: ID
   img: KitchenUtensilimgFile
   clientMutationId: String!
@@ -11341,7 +6655,7 @@ type UpdateMicroTargetPayload {
 }
 
 input UpdateMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY
+  day: Days
   id: ID!
   microTargetsSettingsId: ID
   microTargetsSettings: MicroTargetsDaymicroTargetsSettingsMicroTargetsSettings
@@ -11350,7 +6664,7 @@ input UpdateMicroTargetsDay {
 }
 
 input UpdateMicroTargetsDayInput {
-  day: MICRO_TARGETS_DAY_DAY
+  day: Days
   id: ID!
   microTargetsSettingsId: ID
   microTargetsSettings: MicroTargetsDaymicroTargetsSettingsMicroTargetsSettings
@@ -11395,14 +6709,14 @@ type UpdateMicroTargetsSettingsPayload {
 }
 
 input UpdateNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY
+  day: Days
   id: ID!
   nutritionTargetsSettingsId: ID
   nutritionTargetsSettings: NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettings
 }
 
 input UpdateNutritionTargetsDayInput {
-  day: NUTRITION_TARGETS_DAY_DAY
+  day: Days
   id: ID!
   nutritionTargetsSettingsId: ID
   nutritionTargetsSettings: NutritionTargetsDaynutritionTargetsSettingsNutritionTargetsSettings
@@ -11912,7 +7226,7 @@ type UpdatePersonPayload {
 
 input UpdateRecipe {
   id: ID!
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   public: Boolean
   foodId: ID
   food: RecipefoodFood
@@ -11931,7 +7245,7 @@ input UpdateRecipe {
 
 input UpdateRecipeInput {
   id: ID!
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   public: Boolean
   foodId: ID
   food: RecipefoodFood
@@ -11991,8 +7305,9 @@ type UpdateServingPayload {
 }
 
 input UpdateUser {
+  auth0UserId: String
   id: ID!
-  kitchenUtensils: [USER_KITCHEN_UTENSILS!]
+  kitchenUtensils: [KitchenUtensils!]
   publicName: String
   appSettingsId: ID
   limitationProfilesIds: [ID!]
@@ -12010,8 +7325,9 @@ input UpdateUser {
 }
 
 input UpdateUserInput {
+  auth0UserId: String
   id: ID!
-  kitchenUtensils: [USER_KITCHEN_UTENSILS!]
+  kitchenUtensils: [KitchenUtensils!]
   publicName: String
   appSettingsId: ID
   limitationProfilesIds: [ID!]
@@ -12040,10 +7356,11 @@ type UpdateUserPayload {
 # Family Account
 type User implements Node {
   appSettings(filter: AppSettingsFilter): AppSettings
+  auth0UserId: String
   createdAt: DateTime!
   email: String
   id: ID!
-  kitchenUtensils: [USER_KITCHEN_UTENSILS!]
+  kitchenUtensils: [KitchenUtensils!]
   limitationProfiles(filter: LimitationProfileFilter, orderBy: LimitationProfileOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): LimitationProfileConnection
   meals(filter: MealFilter, orderBy: MealOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): MealConnection
   pantryItems(filter: PantryItemFilter, orderBy: PantryItemOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): PantryItemConnection
@@ -12053,11 +7370,6 @@ type User implements Node {
   recipes(filter: RecipeFilter, orderBy: RecipeOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): RecipeConnection
   updatedAt: DateTime!
   userIngredients(filter: IngredientFilter, orderBy: IngredientOrderBy, skip: Int, after: String, before: String, first: Int, last: Int): IngredientConnection
-}
-
-enum USER_KITCHEN_UTENSILS {
-  Pan
-  Oven
 }
 
 # A connection to a list of items.
@@ -12087,6 +7399,46 @@ input UserFilter {
 
   # Logical OR on all given filters.
   OR: [UserFilter!]
+  auth0UserId: String
+
+  # All values that are not equal to given value.
+  auth0UserId_not: String
+
+  # All values that are contained in given list.
+  auth0UserId_in: [String!]
+
+  # All values that are not contained in given list.
+  auth0UserId_not_in: [String!]
+
+  # All values less than the given value.
+  auth0UserId_lt: String
+
+  # All values less than or equal the given value.
+  auth0UserId_lte: String
+
+  # All values greater than the given value.
+  auth0UserId_gt: String
+
+  # All values greater than or equal the given value.
+  auth0UserId_gte: String
+
+  # All values containing the given string.
+  auth0UserId_contains: String
+
+  # All values not containing the given string.
+  auth0UserId_not_contains: String
+
+  # All values starting with the given string.
+  auth0UserId_starts_with: String
+
+  # All values not starting with the given string.
+  auth0UserId_not_starts_with: String
+
+  # All values ending with the given string.
+  auth0UserId_ends_with: String
+
+  # All values not ending with the given string.
+  auth0UserId_not_ends_with: String
   createdAt: DateTime
 
   # All values that are not equal to given value.
@@ -12315,80 +7667,7 @@ input UserFilter {
 input UserlimitationProfilesLimitationProfile {
   name: String!
   personsIds: [ID!]
-  persons: [UserlimitationProfilesLimitationProfilepersonsPerson!]
-}
-
-input UserlimitationProfilesLimitationProfilepersonsPerson {
-  family: Boolean
-  name: String!
-  microTargetsSettingsId: ID
-  microTargetsSettings: UserlimitationProfilesLimitationProfilepersonsPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: UserlimitationProfilesLimitationProfilepersonsPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: UserlimitationProfilesLimitationProfilepersonsPersonpersonalDataPersonalData
-  servingId: ID
-  serving: UserlimitationProfilesLimitationProfilepersonsPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [UserlimitationProfilesLimitationProfilepersonsPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [UserlimitationProfilesLimitationProfilepersonsPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [UserlimitationProfilesLimitationProfilepersonsPersonmealSettingsMealSettings!]
-}
-
-input UserlimitationProfilesLimitationProfilepersonsPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input UserlimitationProfilesLimitationProfilepersonsPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input UserlimitationProfilesLimitationProfilepersonsPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input UserlimitationProfilesLimitationProfilepersonsPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input UserlimitationProfilesLimitationProfilepersonsPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input UserlimitationProfilesLimitationProfilepersonsPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input UserlimitationProfilesLimitationProfilepersonsPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
+  persons: [LimitationProfilepersonsPerson!]
 }
 
 input UsermealsMeal {
@@ -12396,71 +7675,14 @@ input UsermealsMeal {
   name: String!
   order: Int
   foodsIds: [ID!]
-  foods: [UsermealsMealfoodsFood!]
+  foods: [MealfoodsFood!]
   mealSettingsIds: [ID!]
-  mealSettings: [UsermealsMealmealSettingsMealSettings!]
-}
-
-input UsermealsMealfoodsFood {
-  eaten: Boolean
-  pos: Int
-  recipeId: ID
-  recipe: UsermealsMealfoodsFoodrecipeRecipe
-  leftoversIds: [ID!]
-  leftovers: [UsermealsMealfoodsFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [UsermealsMealfoodsFoodservingsServing!]
-}
-
-input UsermealsMealfoodsFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input UsermealsMealfoodsFoodrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input UsermealsMealfoodsFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input UsermealsMealmealSettingsMealSettings {
-  default: Boolean
-  personId: ID
-  person: UsermealsMealmealSettingsMealSettingspersonPerson
-}
-
-input UsermealsMealmealSettingsMealSettingspersonPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
+  mealSettings: [MealmealSettingsMealSettings!]
 }
 
 enum UserOrderBy {
+  auth0UserId_ASC
+  auth0UserId_DESC
   createdAt_ASC
   createdAt_DESC
   email_ASC
@@ -12477,628 +7699,53 @@ enum UserOrderBy {
 
 input UserpantryItemsPantryItem {
   foodItemId: ID
-  foodItem: UserpantryItemsPantryItemfoodItemFoodItem
-}
-
-input UserpantryItemsPantryItemfoodItemFoodItem {
-  amount: Float
-  ingredientId: ID
-  ingredient: UserpantryItemsPantryItemfoodItemFoodItemingredientIngredient
-}
-
-input UserpantryItemsPantryItemfoodItemFoodItemingredientIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
+  foodItem: PantryItemfoodItemFoodItem
 }
 
 input UserpersonsPerson {
   family: Boolean
   name: String!
   limitationProfileId: ID
-  limitationProfile: UserpersonsPersonlimitationProfileLimitationProfile
+  limitationProfile: PersonlimitationProfileLimitationProfile
   microTargetsSettingsId: ID
-  microTargetsSettings: UserpersonsPersonmicroTargetsSettingsMicroTargetsSettings
+  microTargetsSettings: PersonmicroTargetsSettingsMicroTargetsSettings
   nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: UserpersonsPersonnutritionTargetsSettingsNutritionTargetsSettings
+  nutritionTargetsSettings: PersonnutritionTargetsSettingsNutritionTargetsSettings
   personalDataId: ID
   servingId: ID
-  serving: UserpersonsPersonservingServing
+  serving: PersonservingServing
   dislikedRecipesIds: [ID!]
-  dislikedRecipes: [UserpersonsPersondislikedRecipesRecipe!]
+  dislikedRecipes: [PersondislikedRecipesRecipe!]
   likedRecipesIds: [ID!]
-  likedRecipes: [UserpersonsPersonlikedRecipesRecipe!]
+  likedRecipes: [PersonlikedRecipesRecipe!]
   mealSettingsIds: [ID!]
-  mealSettings: [UserpersonsPersonmealSettingsMealSettings!]
-}
-
-input UserpersonsPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: UserpersonsPersondislikedRecipesRecipefoodFood
-  imgId: ID
-  img: UserpersonsPersondislikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: UserpersonsPersondislikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [UserpersonsPersondislikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [UserpersonsPersondislikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [UserpersonsPersondislikedRecipesRecipelikedByPerson!]
-}
-
-input UserpersonsPersondislikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input UserpersonsPersondislikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input UserpersonsPersondislikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input UserpersonsPersondislikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input UserpersonsPersondislikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input UserpersonsPersondislikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input UserpersonsPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: UserpersonsPersonlikedRecipesRecipefoodFood
-  imgId: ID
-  img: UserpersonsPersonlikedRecipesRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: UserpersonsPersonlikedRecipesRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [UserpersonsPersonlikedRecipesRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [UserpersonsPersonlikedRecipesRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [UserpersonsPersonlikedRecipesRecipelikedByPerson!]
-}
-
-input UserpersonsPersonlikedRecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input UserpersonsPersonlikedRecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input UserpersonsPersonlikedRecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input UserpersonsPersonlikedRecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input UserpersonsPersonlikedRecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input UserpersonsPersonlikedRecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input UserpersonsPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-  persons: [UserpersonsPersonlimitationProfileLimitationProfilepersonsPerson!]
-}
-
-input UserpersonsPersonlimitationProfileLimitationProfilepersonsPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input UserpersonsPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  meal: UserpersonsPersonmealSettingsMealSettingsmealMeal
-}
-
-input UserpersonsPersonmealSettingsMealSettingsmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input UserpersonsPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  microTargetsDaysIds: [ID!]
-  microTargetsDays: [UserpersonsPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay!]
-}
-
-input UserpersonsPersonmicroTargetsSettingsMicroTargetsSettingsmicroTargetsDaysMicroTargetsDay {
-  day: MICRO_TARGETS_DAY_DAY!
-  microTargetsSettingsId: ID
-  microTargetsIds: [ID!]
-}
-
-input UserpersonsPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  nutritionTargetsDaysIds: [ID!]
-  nutritionTargetsDays: [UserpersonsPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay!]
-}
-
-input UserpersonsPersonnutritionTargetsSettingsNutritionTargetsSettingsnutritionTargetsDaysNutritionTargetsDay {
-  day: NUTRITION_TARGETS_DAY_DAY!
-  nutritionTargetsSettingsId: ID
-}
-
-input UserpersonsPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  food: UserpersonsPersonservingServingfoodFood
-}
-
-input UserpersonsPersonservingServingfoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
+  mealSettings: [PersonmealSettingsMealSettings!]
 }
 
 input UserrecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
+  mealCategories: [MealCategories!]
   public: Boolean
   foodId: ID
-  food: UserrecipesRecipefoodFood
+  food: RecipefoodFood
   imgId: ID
-  img: UserrecipesRecipeimgFile
+  img: RecipeimgFile
   nutritionValuesId: ID
-  nutritionValues: UserrecipesRecipenutritionValuesNutritionValues
+  nutritionValues: RecipenutritionValuesNutritionValues
   dislikedByIds: [ID!]
-  dislikedBy: [UserrecipesRecipedislikedByPerson!]
+  dislikedBy: [RecipedislikedByPerson!]
   ingredientsIds: [ID!]
-  ingredients: [UserrecipesRecipeingredientsIngredient!]
+  ingredients: [RecipeingredientsIngredient!]
   likedByIds: [ID!]
-  likedBy: [UserrecipesRecipelikedByPerson!]
-}
-
-input UserrecipesRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: UserrecipesRecipedislikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: UserrecipesRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: UserrecipesRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: UserrecipesRecipedislikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: UserrecipesRecipedislikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [UserrecipesRecipedislikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [UserrecipesRecipedislikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [UserrecipesRecipedislikedByPersonmealSettingsMealSettings!]
-}
-
-input UserrecipesRecipedislikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input UserrecipesRecipedislikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input UserrecipesRecipedislikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input UserrecipesRecipedislikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input UserrecipesRecipedislikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input UserrecipesRecipedislikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input UserrecipesRecipedislikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input UserrecipesRecipedislikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input UserrecipesRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  meal: UserrecipesRecipefoodFoodmealMeal
-  leftoversIds: [ID!]
-  leftovers: [UserrecipesRecipefoodFoodleftoversFood!]
-  servingsIds: [ID!]
-  servings: [UserrecipesRecipefoodFoodservingsServing!]
-}
-
-input UserrecipesRecipefoodFoodleftoversFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input UserrecipesRecipefoodFoodmealMeal {
-  date: DateTime!
-  name: String!
-  order: Int
-  userId: ID
-  foodsIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input UserrecipesRecipefoodFoodservingsServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input UserrecipesRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  kitchenUtensilImg: UserrecipesRecipeimgFilekitchenUtensilImgKitchenUtensil
-}
-
-input UserrecipesRecipeimgFilekitchenUtensilImgKitchenUtensil {
-  type: KITCHEN_UTENSIL_TYPE!
-  imgId: ID
-}
-
-input UserrecipesRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  nutritionValues: UserrecipesRecipeingredientsIngredientnutritionValuesNutritionValues
-  userId: ID
-  foodItemsIds: [ID!]
-  foodItems: [UserrecipesRecipeingredientsIngredientfoodItemsFoodItem!]
-}
-
-input UserrecipesRecipeingredientsIngredientfoodItemsFoodItem {
-  amount: Float
-  ingredientId: ID
-  pantryItemId: ID
-}
-
-input UserrecipesRecipeingredientsIngredientnutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
-}
-
-input UserrecipesRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  limitationProfile: UserrecipesRecipelikedByPersonlimitationProfileLimitationProfile
-  microTargetsSettingsId: ID
-  microTargetsSettings: UserrecipesRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings
-  nutritionTargetsSettingsId: ID
-  nutritionTargetsSettings: UserrecipesRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings
-  personalDataId: ID
-  personalData: UserrecipesRecipelikedByPersonpersonalDataPersonalData
-  servingId: ID
-  serving: UserrecipesRecipelikedByPersonservingServing
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  dislikedRecipes: [UserrecipesRecipelikedByPersondislikedRecipesRecipe!]
-  likedRecipesIds: [ID!]
-  likedRecipes: [UserrecipesRecipelikedByPersonlikedRecipesRecipe!]
-  mealSettingsIds: [ID!]
-  mealSettings: [UserrecipesRecipelikedByPersonmealSettingsMealSettings!]
-}
-
-input UserrecipesRecipelikedByPersondislikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input UserrecipesRecipelikedByPersonlikedRecipesRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input UserrecipesRecipelikedByPersonlimitationProfileLimitationProfile {
-  name: String!
-  userId: ID
-  personsIds: [ID!]
-}
-
-input UserrecipesRecipelikedByPersonmealSettingsMealSettings {
-  default: Boolean
-  mealId: ID
-  personId: ID
-}
-
-input UserrecipesRecipelikedByPersonmicroTargetsSettingsMicroTargetsSettings {
-  daily: Boolean
-  personId: ID
-  microTargetsDaysIds: [ID!]
-}
-
-input UserrecipesRecipelikedByPersonnutritionTargetsSettingsNutritionTargetsSettings {
-  daily: Boolean
-  personId: ID
-  nutritionTargetsDaysIds: [ID!]
-}
-
-input UserrecipesRecipelikedByPersonpersonalDataPersonalData {
-  personId: ID
-}
-
-input UserrecipesRecipelikedByPersonservingServing {
-  guest: Boolean
-  size: Float
-  foodId: ID
-  personId: ID
-}
-
-input UserrecipesRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  ingredient: UserrecipesRecipenutritionValuesNutritionValuesingredientIngredient
-}
-
-input UserrecipesRecipenutritionValuesNutritionValuesingredientIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
+  likedBy: [RecipelikedByPerson!]
 }
 
 input UseruserIngredientsIngredient {
   nutritionValuesId: ID
-  nutritionValues: UseruserIngredientsIngredientnutritionValuesNutritionValues
+  nutritionValues: IngredientnutritionValuesNutritionValues
   recipeId: ID
-  recipe: UseruserIngredientsIngredientrecipeRecipe
+  recipe: IngredientrecipeRecipe
   foodItemsIds: [ID!]
-  foodItems: [UseruserIngredientsIngredientfoodItemsFoodItem!]
-}
-
-input UseruserIngredientsIngredientfoodItemsFoodItem {
-  amount: Float
-  pantryItemId: ID
-  pantryItem: UseruserIngredientsIngredientfoodItemsFoodItempantryItemPantryItem
-}
-
-input UseruserIngredientsIngredientfoodItemsFoodItempantryItemPantryItem {
-  foodItemId: ID
-  userId: ID
-}
-
-input UseruserIngredientsIngredientnutritionValuesNutritionValues {
-  recipeId: ID
-  recipe: UseruserIngredientsIngredientnutritionValuesNutritionValuesrecipeRecipe
-}
-
-input UseruserIngredientsIngredientnutritionValuesNutritionValuesrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  imgId: ID
-  nutritionValuesId: ID
-  userId: ID
-  dislikedByIds: [ID!]
-  ingredientsIds: [ID!]
-  likedByIds: [ID!]
-}
-
-input UseruserIngredientsIngredientrecipeRecipe {
-  mealCategories: [RECIPE_MEAL_CATEGORIES!]
-  public: Boolean
-  foodId: ID
-  food: UseruserIngredientsIngredientrecipeRecipefoodFood
-  imgId: ID
-  img: UseruserIngredientsIngredientrecipeRecipeimgFile
-  nutritionValuesId: ID
-  nutritionValues: UseruserIngredientsIngredientrecipeRecipenutritionValuesNutritionValues
-  userId: ID
-  dislikedByIds: [ID!]
-  dislikedBy: [UseruserIngredientsIngredientrecipeRecipedislikedByPerson!]
-  ingredientsIds: [ID!]
-  ingredients: [UseruserIngredientsIngredientrecipeRecipeingredientsIngredient!]
-  likedByIds: [ID!]
-  likedBy: [UseruserIngredientsIngredientrecipeRecipelikedByPerson!]
-}
-
-input UseruserIngredientsIngredientrecipeRecipedislikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input UseruserIngredientsIngredientrecipeRecipefoodFood {
-  eaten: Boolean
-  pos: Int
-  mealId: ID
-  recipeId: ID
-  leftoversIds: [ID!]
-  servingsIds: [ID!]
-}
-
-input UseruserIngredientsIngredientrecipeRecipeimgFile {
-  name: String!
-  kitchenUtensilImgId: ID
-  recipeImgId: ID
-}
-
-input UseruserIngredientsIngredientrecipeRecipeingredientsIngredient {
-  nutritionValuesId: ID
-  recipeId: ID
-  userId: ID
-  foodItemsIds: [ID!]
-}
-
-input UseruserIngredientsIngredientrecipeRecipelikedByPerson {
-  family: Boolean
-  name: String!
-  limitationProfileId: ID
-  microTargetsSettingsId: ID
-  nutritionTargetsSettingsId: ID
-  personalDataId: ID
-  servingId: ID
-  userId: ID
-  dislikedRecipesIds: [ID!]
-  likedRecipesIds: [ID!]
-  mealSettingsIds: [ID!]
-}
-
-input UseruserIngredientsIngredientrecipeRecipenutritionValuesNutritionValues {
-  ingredientId: ID
-  recipeId: ID
+  foodItems: [IngredientfoodItemsFoodItem!]
 }
 
 # This is the famous Relay viewer object
@@ -13134,7 +7781,7 @@ type Viewer {
   Food(id: ID): Food
   FoodItem(id: ID): FoodItem
   Ingredient(id: ID): Ingredient
-  KitchenUtensil(id: ID, type: KITCHEN_UTENSIL_TYPE): KitchenUtensil
+  KitchenUtensil(id: ID, type: KitchenUtensils): KitchenUtensil
   LimitationProfile(id: ID): LimitationProfile
   Meal(id: ID): Meal
   MealSettings(id: ID): MealSettings
@@ -13149,7 +7796,7 @@ type Viewer {
   PersonalData(id: ID): PersonalData
   Recipe(id: ID): Recipe
   Serving(id: ID): Serving
-  User(email: String, id: ID, publicName: String): User
+  User(auth0UserId: String, email: String, id: ID, publicName: String): User
   id: ID!
 }
 
